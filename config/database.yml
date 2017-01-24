@@ -1,0 +1,16 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+
+development:
+  <<: *default
+  database: sportup_bot_development
+
+test:
+  <<: *default
+  database: sportup_bot_test
+
+production:
+  <<: *default
+  database: sportup_bot_production
