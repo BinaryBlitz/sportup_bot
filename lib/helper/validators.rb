@@ -9,14 +9,16 @@ module Helper
     MIN_NUMBER_OF_MEMBERS = 1
 
     def valid_date?(date)
-      yield(date) if valid_date_format? && block_given?
+      yield(date) if valid_date_format? && present_date?(date) && block_given?
     end
 
     def valid_date_format?
-      text =~ DATE_FORMAT && present_date?
-    rescue
-      send_message_with_reply("#{I18n.t('invalid_date')}")
-      false
+      if (text =~ DATE_FORMAT).nil?
+        send_message_with_reply("#{I18n.t('invalid_date')}")
+        false
+      else
+        true
+      end
     end
 
     def valid_length?(text)
