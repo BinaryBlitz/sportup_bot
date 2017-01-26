@@ -43,7 +43,7 @@ module BotCommand
     end
 
     def starts_at
-      valid_time? text do |starts_at|
+      valid_time?(event, text) do |starts_at|
         event.update(starts_at: starts_at)
         send_message_with_reply("#{I18n.t('ends_at')}")
         user.set_next_bot_command({ method: :ends_at })
@@ -51,7 +51,7 @@ module BotCommand
     end
 
     def ends_at
-      valid_time? text do |ends_at|
+      valid_time?(event, text) do |ends_at|
         event.update(ends_at: ends_at)
         send_message_with_reply("#{I18n.t('user_limit')}")
         user.set_next_bot_command({ method: :user_limit })

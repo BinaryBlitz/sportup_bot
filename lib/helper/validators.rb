@@ -12,6 +12,10 @@ module Helper
       yield(date) if valid_date_format? && present_date?(date) && block_given?
     end
 
+    def valid_time?(event, time)
+      yield(time) if valid_time_format?(time) && present_time?(event, time) && block_given?
+    end
+
     def valid_date_format?
       if (text =~ DATE_FORMAT).nil?
         send_message_with_reply("#{I18n.t('invalid_date')}")
@@ -39,11 +43,12 @@ module Helper
       end
     end
 
-    def valid_time?(time)
-      Time.parse(time)
-      block_given? && yield(time)
+    def valid_time_format?(time)
+      raise ArgumentError if Time.parse(time).to_date != ::Date.today
+      true
     rescue
       send_message_with_reply("#{I18n.t('invalid_time')}")
+      false
     end
   end
 end

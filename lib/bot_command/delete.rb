@@ -8,7 +8,7 @@ module BotCommand
     end
 
     def start
-      if user.guests.any?
+      if event && user.guests.any?
         user.guests.last.delete
         send_message(
           "@#{user.name} удалил Гостя на " \
