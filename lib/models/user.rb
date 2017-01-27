@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
 
   def set_next_bot_command(options = {})
     bot_command_data[:method] = options[:method]
+    bot_command_data[:class] = options[:class]
     save
   end
 

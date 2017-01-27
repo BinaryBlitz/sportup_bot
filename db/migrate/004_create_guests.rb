@@ -3,6 +3,7 @@ class CreateGuests < ActiveRecord::Migration
     create_table :guests do |t|
       t.references :user, index: true, null: false
       t.references :event, index: true, null: false
+      t.integer :team_number
 
       t.timestamps
     end

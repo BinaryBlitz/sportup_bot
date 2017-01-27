@@ -3,6 +3,7 @@ class CreateMemberships < ActiveRecord::Migration
     create_table :memberships do |t|
       t.references :user, index: true, null: false
       t.references :event, index: true, null: false
+      t.integer :team_number
 
       t.timestamps null: false
     end

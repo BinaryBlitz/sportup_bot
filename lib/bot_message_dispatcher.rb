@@ -11,7 +11,10 @@ class BotMessageDispatcher
     BotCommand::Out,
     BotCommand::Add,
     BotCommand::Delete,
-    BotCommand::List
+    BotCommand::List,
+    BotCommand::Randomize,
+    BotCommand::Teams,
+    BotCommand::Help
   ].freeze
 
   def initialize(message, user)
@@ -53,6 +56,6 @@ class BotMessageDispatcher
   end
 
   def execute_next_command_method(method)
-    BotCommand::Create.new(@user, @message).public_send(method)
+    Object.const_get(@user.bot_command_data['class']).new(@user, @message).public_send(method)
   end
 end

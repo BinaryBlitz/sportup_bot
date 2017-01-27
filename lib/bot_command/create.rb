@@ -14,7 +14,7 @@ module BotCommand
         send_message("#{I18n.t('existing_event')}")
       else
         send_message_with_reply("#{I18n.t('name')}")
-        user.set_next_bot_command({ method: :name })
+        user.set_next_bot_command({ method: :name , class: self.class.to_s })
       end
     end
 
@@ -22,7 +22,7 @@ module BotCommand
       valid_length? text do |name|
         Event.create(name: name, chat_id: chat_id)
         send_message_with_reply("#{I18n.t('address')}")
-        user.set_next_bot_command({ method: :address })
+        user.set_next_bot_command({ method: :address , class: self.class.to_s })
       end
     end
 
@@ -30,7 +30,7 @@ module BotCommand
       valid_length? text do |address|
         event.update(address: address)
         send_message_with_reply("#{I18n.t('starting_date')}")
-        user.set_next_bot_command({ method: :starting_date })
+        user.set_next_bot_command({ method: :starting_date , class: self.class.to_s })
       end
     end
 
@@ -38,7 +38,7 @@ module BotCommand
       valid_date? text do |date|
         event.update(starting_date: date)
         send_message_with_reply("#{I18n.t('starts_at')}")
-        user.set_next_bot_command({ method: :starts_at })
+        user.set_next_bot_command({ method: :starts_at , class: self.class.to_s })
       end
     end
 
@@ -46,7 +46,7 @@ module BotCommand
       valid_time?(event, text) do |starts_at|
         event.update(starts_at: starts_at)
         send_message_with_reply("#{I18n.t('ends_at')}")
-        user.set_next_bot_command({ method: :ends_at })
+        user.set_next_bot_command({ method: :ends_at , class: self.class.to_s })
       end
     end
 
@@ -54,7 +54,7 @@ module BotCommand
       valid_time?(event, text) do |ends_at|
         event.update(ends_at: ends_at)
         send_message_with_reply("#{I18n.t('user_limit')}")
-        user.set_next_bot_command({ method: :user_limit })
+        user.set_next_bot_command({ method: :user_limit , class: self.class.to_s })
       end
     end
 
