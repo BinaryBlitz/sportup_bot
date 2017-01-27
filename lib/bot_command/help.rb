@@ -1,7 +1,7 @@
 module BotCommand
-  class Start < Base
+  class Help < Base
     def should_start?
-      text == '/start' || text == "/start@#{bot_name}"
+      text == '/help' || text == "/help@#{bot_name}"
     end
 
     def start
