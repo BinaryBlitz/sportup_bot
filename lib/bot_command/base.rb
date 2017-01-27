@@ -28,6 +28,10 @@ module BotCommand
       admin_ids.include?(@user.telegram_id.to_i) ? true : false
     end
 
+    def only_text
+      send_message_with_reply("#{I18n.t('empty_text')}") if @message['message']['reply_to_message']
+    end
+
     protected
 
     def send_message(text, options = {})
