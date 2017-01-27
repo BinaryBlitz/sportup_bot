@@ -15,7 +15,7 @@ module Helper
     end
 
     def present_time?(event, time)
-      date_with_time = I18n.l(add_time_to_date(event.starting_date, time), format: :long)
+      date_with_time = add_time_to_date(event.starting_date, time)
       if event.starts_at && date_with_time > event.starts_at_with_date
         true
       elsif !event.starts_at && date_with_time > current_time
