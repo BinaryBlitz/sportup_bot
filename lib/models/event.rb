@@ -1,4 +1,5 @@
 require 'active_record'
+require 'telegram/bot'
 require './lib/helper'
 require './environment'
 
@@ -17,7 +18,7 @@ class Event < ActiveRecord::Base
   def close
     if close_time?
       update(closed: true)
-      Telegram::Bot::Api.new(Environment.token).send_message(
+      Telegram::Bot::Api.new(token).send_message(
         chat_id: chat_id,
         text: "#{I18n.t('farewell_message')}"
       )
@@ -43,7 +44,7 @@ class Event < ActiveRecord::Base
   end
 
   def close_time?
-    starts_at_with_date == current_time
+    starts_at_with_date <= current_time
   end
 
   def starts_at_with_date

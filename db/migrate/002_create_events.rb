@@ -8,6 +8,7 @@ class CreateEvents < ActiveRecord::Migration
       t.time :ends_at
       t.integer :user_limit
       t.string :chat_id
+      t.boolean :closed, default: false
 
       t.timestamps null: false
     end

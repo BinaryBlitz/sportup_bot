@@ -4,6 +4,8 @@ require 'bundler/setup'
 require 'pg'
 require 'active_record'
 require 'yaml'
+require './lib/models/event'
+require './app_configurator'
 
 namespace :db do
 
@@ -36,4 +38,10 @@ namespace :db do
     Rake::Task['db:create'].invoke
     Rake::Task['db:migrate'].invoke
   end
+end
+
+desc 'Close an event'
+task :close do
+  AppConfigurator.new.configure
+  Event.first.close if Event.any?
 end
