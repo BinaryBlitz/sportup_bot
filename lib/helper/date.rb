@@ -18,7 +18,7 @@ module Helper
       date_with_time = add_time_to_date(event.starting_date, time)
       if event.starts_at && date_with_time > event.starts_at_with_date
         true
-      elsif !event.starts_at && date_with_time > current_time
+      elsif !event.starts_at && date_with_time > Time.now
         true
       else
         send_message_with_reply("#{I18n.t('past_time')}")
@@ -29,10 +29,6 @@ module Helper
     def add_time_to_date(date, time)
       time = time.split(':').map(&:to_i)
       date + time[0]*MINUTES_IN_HOUR*MINUTES_IN_HOUR + time[1]*MINUTES_IN_HOUR
-    end
-
-    def current_time
-      I18n.l(Time.now, format: :long)
     end
   end
 end
