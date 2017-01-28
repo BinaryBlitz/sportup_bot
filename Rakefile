@@ -43,5 +43,5 @@ end
 desc 'Close an event'
 task :close do
   AppConfigurator.new.configure
-  Event.first.close if Event.any?
+  Event.all.map(&:close) if Event.any?
 end
