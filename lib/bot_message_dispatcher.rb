@@ -24,7 +24,7 @@ class BotMessageDispatcher
 
   def process
     command = parse_command
-    if @message['message']['text'].nil?
+    if @message['message'].nil? || @message['message']['text'].nil?
       BotCommand::Base.new(@user, @message).only_text
     elsif command_not_from_admin?(command)
       BotCommand::Unauthorized.new(@user, @message).start
@@ -44,7 +44,7 @@ class BotMessageDispatcher
   end
 
   def commands_for_admin?(command)
-    command == BotCommand::Create || command == BotCommand::Stop
+    command == BotCommand::Create || command == BotCommand::Stop || command == BotCommand::Randomize
   end
 
   def command_not_from_admin?(command)

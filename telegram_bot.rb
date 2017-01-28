@@ -23,7 +23,7 @@ class TelegramBot
   end
 
   def user
-    @user = User.find_by(telegram_id: from['id']) || register_user
+    @user = User.find_by(telegram_id: from['id']) || register_user if from
   end
 
   def register_user

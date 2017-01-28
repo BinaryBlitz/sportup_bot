@@ -23,6 +23,7 @@ module BotCommand
 
     def admin?
       return true if private_chat?
+      return false unless @user
       admins = @api.getChatAdministrators(chat_id: chat_id)
       admin_ids = admins['result'].map { |user| user['user']['id'] }
       admin_ids.include?(@user.telegram_id.to_i) ? true : false
@@ -52,7 +53,7 @@ module BotCommand
     end
 
     def chat_id
-      @message['message']['chat']['id']
+      @message['message']['chat']['id'] unless @message['message'].nil?
     end
 
     def event

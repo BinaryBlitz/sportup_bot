@@ -3,6 +3,7 @@ module BotCommand
     include Helper::Validators
 
     def should_start?
+      return false if text.nil?
       text.start_with?('/randomize') || text.start_with?("/randomize@#{bot_name}")
     end
 
