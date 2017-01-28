@@ -64,7 +64,7 @@ class Event < ActiveRecord::Base
 
   def starts_at_with_date
     starts_at = I18n.l(self.starts_at, format: :short)
-    I18n.l(add_time_to_date(starting_date, starts_at), format: :long)
+    add_time_to_date(starting_date, starts_at)
   end
 
   private
@@ -102,6 +102,6 @@ class Event < ActiveRecord::Base
   end
 
   def close_time?
-    starts_at_with_date <= current_time
+    starts_at_with_date <= Time.now
   end
 end

@@ -17,5 +17,6 @@ class AppConfigurator
 
   def setup_database
     DatabaseConnector.establish_connection
+    DatabaseConnector.set_timezone
   end
 end

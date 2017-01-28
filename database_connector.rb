@@ -8,6 +8,10 @@ class DatabaseConnector
       ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'] || configuration)
     end
 
+    def set_timezone
+      ActiveRecord::Base.default_timezone = :local
+    end
+
     private
 
     def database_config_path
