@@ -44,13 +44,10 @@ class Event < ActiveRecord::Base
   end
 
   def random_teams_list(number)
-    members_in_team = members.count / number
     members_list = members.shuffle
     list = []
-    1.upto(number) do |i|
-      random_team_formation(members_list, list, members_in_team, i)
-    end
-    list.join("\n")
+    teams = random_team_formation(members_list, number)
+    random_team_list_formation(list, teams)
   end
 
   def teams_list
@@ -69,19 +66,34 @@ class Event < ActiveRecord::Base
 
   private
 
-  def random_team_formation(members, list, members_in_team, team_number)
-    team = []
-    members.last(members_in_team).each.with_index(1) do |member, j|
-      if member.class == User
-        team << "#{j}.@#{member.name}"
-        membership(member).update(team_number: team_number)
-      else
-        team << "#{j}.Гость @#{member.user.name}"
-        member.update(team_number: team_number)
-      end
+  def random_team_formation(members, number)
+    members_in_team = members.count / number
+    extra = members.count % number
+    list = []
+    start = 0
+    1.upto(number) do |i|
+      last = (i <= extra) ? members_in_team.next : members_in_team
+      list << members.slice(start, last)
+      start = list.flatten.size
     end
-    members.pop(members_in_team)
-    list << "Команда #{team_number}:\n#{team.join("\n")}"
+    list
+  end
+
+  def random_team_list_formation(list, teams)
+    teams.each.with_index(1) do |team, i|
+      team_list = []
+      team.each.with_index(1) do |member, j|
+        if member.class == User
+          team_list << "#{j}.@#{member.name}"
+          membership(member).update(team_number: i)
+        else
+          team_list << "#{j}.Гость @#{member.user.name}"
+          member.update(team_number: i)
+        end
+      end
+      list << "Команда #{i}:\n#{team_list.join("\n")}"
+    end
+    list.join("\n")
   end
 
   def team_formation(members, list, team_number)
