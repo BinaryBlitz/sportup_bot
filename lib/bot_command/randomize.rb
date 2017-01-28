@@ -8,7 +8,7 @@ module BotCommand
     end
 
     def start
-      if event && text.split('/randomize').empty?
+      if event && (text.split('/randomize').empty? || text.split("/randomize@#{bot_name}").empty?)
         send_message_with_reply('Введите количество команд')
         user.set_next_bot_command({ method: :number, class: self.class.to_s })
       elsif event
