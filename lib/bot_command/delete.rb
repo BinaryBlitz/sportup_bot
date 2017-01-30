@@ -8,8 +8,8 @@ module BotCommand
     end
 
     def start
-      if event && user.guests.any?
-        user.guests.last.delete
+      if event && user.guests.where(event: event).any?
+        user.guests.where(event: event).last.delete
         send_message(
           "@#{user.name} удалил Гостя на " \
           "#{I18n.l(event.starting_date)} #{event.name} " \
