@@ -11,7 +11,7 @@ module BotCommand
       if event && user.guests.where(event: event).any?
         user.guests.where(event: event).last.delete
         send_message(
-          "@#{user.name} удалил Гостя на " \
+          "#{username} удалил Гостя на " \
           "#{I18n.l(event.starting_date)} #{event.name} " \
           "Участвует #{event.members_count}/#{event.user_limit}"
         )

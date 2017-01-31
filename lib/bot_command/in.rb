@@ -11,7 +11,7 @@ module BotCommand
       if event && event.members_count < event.user_limit || event.members.include?(user)
         Membership.create(user: user, event: event) unless event.users.include?(user)
         send_message(
-          "@#{user.name} будет присутствовать на " \
+          "#{username} будет присутствовать на " \
           "#{I18n.l(event.starting_date)} #{event.name} " \
           "Участвует #{event.members_count}/#{event.user_limit}"
         )

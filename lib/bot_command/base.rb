@@ -64,6 +64,10 @@ module BotCommand
       @api.getMe['result']['username']
     end
 
+    def username
+      @user.username.present? ? "@#{@user.name}" : "#{@user.first_name}"
+    end
+
     def private_chat?
       @message['message']['chat']['type'] == 'private'
     end
