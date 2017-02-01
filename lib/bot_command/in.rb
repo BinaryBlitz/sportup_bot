@@ -8,7 +8,7 @@ module BotCommand
     end
 
     def start
-      if event && event.members_count < event.user_limit || event.members.include?(user)
+      if event && (event.members_count < event.user_limit || event.members.include?(user))
         Membership.create(user: user, event: event) unless event.users.include?(user)
         send_message(
           "#{username} будет присутствовать на " \
