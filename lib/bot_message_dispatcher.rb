@@ -1,4 +1,6 @@
 require_relative 'bot_command'
+require 'telegram/bot/botan'
+require './environment'
 
 class BotMessageDispatcher
   attr_reader :message, :user
@@ -20,6 +22,7 @@ class BotMessageDispatcher
   def initialize(message, user)
     @message = message
     @user = user
+    @botan = Telegram::Bot::Botan::Api.new(Environment.botan_token)
   end
 
   def process
@@ -30,6 +33,7 @@ class BotMessageDispatcher
       BotCommand::Unauthorized.new(@user, @message).start
     elsif command
       command.new(@user, @message).start
+      @botan.track(@message['message']['text'], @message['message']['from']['id'])
     elsif next_bot_command
       execute_next_command_method(next_bot_command)
     else
