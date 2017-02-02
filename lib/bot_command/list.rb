@@ -6,18 +6,14 @@ module BotCommand
     end
 
     def start
-      if event
-        send_message(
-          "#{I18n.l(event.starting_date)} #{event.name} \n" \
-          "#{event.address} \n" \
-          "#{event.starts_at.strftime("%H:%M")} - #{event.ends_at.strftime("%H:%M")} \n" \
-          "#{event.user_limit} участников \n" \
-          "Идут #{event.members_count}/#{event.user_limit}: \n" \
-          "#{event.members_list}"
-        )
-      else
-        send_message("#{I18n.t('no_events')}")
-      end
+      send_message(
+        "#{I18n.l(event.starting_date)} #{event.name} \n" \
+        "#{event.address} \n" \
+        "#{event.starts_at.strftime("%H:%M")} - #{event.ends_at.strftime("%H:%M")} \n" \
+        "#{event.user_limit} участников \n" \
+        "Идут #{event.members_count}/#{event.user_limit}: \n" \
+        "#{event.members_list}"
+      )
       user.reset_next_bot_command
     end
   end

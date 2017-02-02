@@ -5,12 +5,10 @@ module BotCommand
     end
 
     def start
-      if event && event.number_of_teams.zero?
+      if event.number_of_teams.zero?
         send_message("#{I18n.t('no_teams')}")
-      elsif event
-        send_message("#{event.teams_list}")
       else
-        send_message("#{I18n.t('no_events')}")
+        send_message("#{event.teams_list}")
       end
       user.reset_next_bot_command
     end

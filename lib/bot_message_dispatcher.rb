@@ -32,7 +32,9 @@ class BotMessageDispatcher
     elsif command_not_from_admin?(command)
       BotCommand::Unauthorized.new(@user, @message).start
     elsif command
-      command.new(@user, @message).start
+      command = command.new(@user, @message)
+      return command.send_message("#{I18n.t('no_events')}") unless event_exists?(command)
+      command.start
       @botan.track(@message['message']['text'], @message['message']['from']['id'])
     elsif next_bot_command
       execute_next_command_method(next_bot_command)
@@ -45,6 +47,10 @@ class BotMessageDispatcher
 
   def parse_command
     AVAILABLE_COMMANDS.detect { |command_class| command_class.new(@user, @message).should_start? }
+  end
+
+  def event_exists?(command)
+    command.event || command.class == BotCommand::Create
   end
 
   def commands_for_admin?(command)

@@ -33,11 +33,15 @@ module BotCommand
       send_message_with_reply("#{I18n.t('empty_text')}") if @message['message']['reply_to_message']
     end
 
-    protected
+    def event
+      Event.find_by(chat_id: chat_id)
+    end
 
     def send_message(text, options = {})
       @api.send_message({ chat_id: chat_id, text: text }.update(options))
     end
+
+    protected
 
     def send_message_with_reply(text)
       @api.send_message({
@@ -54,10 +58,6 @@ module BotCommand
 
     def chat_id
       @message['message']['chat']['id'] unless @message['message'].nil?
-    end
-
-    def event
-      Event.find_by(chat_id: chat_id)
     end
 
     def bot_name
