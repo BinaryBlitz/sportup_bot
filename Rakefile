@@ -1,10 +1,11 @@
 require 'rubygems'
 require 'bundler/setup'
-
 require 'pg'
 require 'active_record'
 require 'yaml'
 require './lib/models/event'
+require './lib/models/membership'
+require './lib/models/user'
 require './app_configurator'
 
 namespace :db do
@@ -44,4 +45,16 @@ desc 'Close an event'
 task :close do
   AppConfigurator.new.configure
   Event.all.map(&:close) if Event.any?
+end
+
+desc 'Start vote'
+task :start_vote do
+  AppConfigurator.new.configure
+  Event.all.map(&:begin_vote) if Event.any?
+end
+
+desc 'Close vote'
+task :close_vote do
+  AppConfigurator.new.configure
+  Event.all.map(&:close_vote) if Event.any?
 end

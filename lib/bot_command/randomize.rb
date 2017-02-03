@@ -8,18 +8,15 @@ module BotCommand
     end
 
     def start
-      if event && (text.split('/randomize').empty? || text.split("/randomize@#{bot_name}").empty?)
+      if text.split('/randomize').empty? || text.split("/randomize@#{bot_name}").empty?
         send_message_with_reply('Введите количество команд')
         user.set_next_bot_command({ method: :number, class: self.class.to_s })
-      elsif event
+      else
         number = text.gsub(/\/randomize\s+/, '').to_i
         valid_number_of_teams?(number, event) do |number|
           send_message("Составы команд разделены следующим образом: \n#{event.random_teams_list(number)}")
           user.reset_next_bot_command
         end
-      else
-        send_message("#{I18n.t('no_events')}")
-        user.reset_next_bot_command
       end
     end
 

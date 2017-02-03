@@ -8,17 +8,15 @@ module BotCommand
     end
 
     def start
-      if event && (event.members_count < event.user_limit || event.members.include?(user))
+      if event.members_count < event.user_limit || event.members.include?(user)
         Membership.create(user: user, event: event) unless event.users.include?(user)
         send_message(
           "#{username} будет присутствовать на " \
           "#{I18n.l(event.starting_date)} #{event.name} " \
           "Участвует #{event.members_count}/#{event.user_limit}"
         )
-      elsif event && event.members_count == event.user_limit
-        send_message("#{I18n.t('full_event')}")
       else
-        send_message("#{I18n.t('no_events')}")
+        send_message("#{I18n.t('full_event')}")
       end
       user.reset_next_bot_command
     end
