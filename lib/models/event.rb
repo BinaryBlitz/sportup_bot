@@ -6,6 +6,7 @@ require './environment'
 class Event < ActiveRecord::Base
   include Helper::Date
   include Helper::Teams
+  include Helper::Vote
   include Environment
 
   default_scope { where(closed: false) }
@@ -14,15 +15,13 @@ class Event < ActiveRecord::Base
   has_many :memberships, dependent: :destroy
   has_many :guests, dependent: :destroy
 
-  scope :closed, -> { where(closed: true) }
+  def api
+    Telegram::Bot::Api.new(token)
+  end
 
   def close
     if close_time?
-      update(closed: true)
-      Telegram::Bot::Api.new(token).send_message(
-        chat_id: chat_id,
-        text: "#{I18n.t('farewell_message')}"
-      )
+      api.send_message(chat_id: chat_id, text: "#{I18n.t('farewell_message')}")
     end
   end
 
@@ -34,9 +33,9 @@ class Event < ActiveRecord::Base
     users + guests
   end
 
-  def starts_at_with_date
-    starts_at = I18n.l(self.starts_at, format: :short)
-    add_time_to_date(starting_date, starts_at)
+  def date_with_time(time)
+    time = I18n.l(time, format: :short)
+    add_time_to_date(starting_date, time)
   end
 
   def membership(user)
@@ -46,6 +45,6 @@ class Event < ActiveRecord::Base
   private
 
   def close_time?
-    starts_at_with_date <= Time.now
+    date_with_time(starts_at) <= Time.now
   end
 end

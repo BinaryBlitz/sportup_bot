@@ -16,7 +16,9 @@ class BotMessageDispatcher
     BotCommand::List,
     BotCommand::Randomize,
     BotCommand::Teams,
-    BotCommand::Help
+    BotCommand::Help,
+    BotCommand::Vote,
+    BotCommand::BestPlayer
   ].freeze
 
   def initialize(message, user)
@@ -50,7 +52,7 @@ class BotMessageDispatcher
   end
 
   def event_exists?(command)
-    command.event || command.class == BotCommand::Create
+    command.event || command.class == BotCommand::Create || command.class == BotCommand::Help
   end
 
   def commands_for_admin?(command)
