@@ -8,7 +8,7 @@ module Helper
           guest_name(member)
         end
       end
-      list.each.with_index(1) { |member, i| member.prepend(i.to_s) }
+      list.each.with_index(1) { |member, i| member.prepend("#{i}.") }
       list.join("\n")
     end
 
@@ -59,7 +59,7 @@ module Helper
             member.update(team_number: i)
           end
         end
-        team_list.each.with_index(1) { |member, i| member.prepend(i.to_s) }
+        team_list.each.with_index(1) { |member, i| member.prepend("#{i}.") }
         list << "Команда #{i}:\n#{team_list.join("\n")}"
       end
       list.join("\n\n")
@@ -74,16 +74,16 @@ module Helper
           team << (guest_name(member)) if team_number == member.team_number
         end
       end
-      team.each.with_index(1) { |member, i| member.prepend(i.to_s) }
+      team.each.with_index(1) { |member, i| member.prepend("#{i}.") }
       list << "Команда #{team_number}:\n#{team.join("\n")}"
     end
 
     def member_name(member)
-      member.username.present? ? ".@#{member.name}" : ".#{member.first_name}"
+      member.username.present? ? "@#{member.name}" : "#{member.first_name}"
     end
 
     def guest_name(member)
-      member.user.username.present? ? ".Гость @#{member.user.name}" : ".Гость #{member.user.first_name}"
+      member.user.username.present? ? "Гость @#{member.user.name}" : "Гость #{member.user.first_name}"
     end
   end
 end
