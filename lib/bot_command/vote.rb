@@ -17,7 +17,7 @@ module BotCommand
         send_message_with_reply("#{I18n.t('number')}")
         user.set_next_bot_command({ method: :number, class: self.class.to_s })
       elsif event.members.include?(user)
-        valid_number_of_teams?(number, event) do |number|
+        valid_vote?(number, event) do |number|
           vote(number)
         end
       else
@@ -27,7 +27,7 @@ module BotCommand
     end
 
     def number
-      valid_number_of_teams?(text, event) do |number|
+      valid_vote?(text, event) do |number|
         vote(number.to_i)
       end
     end

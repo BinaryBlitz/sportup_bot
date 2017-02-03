@@ -53,6 +53,16 @@ module Helper
       end
     end
 
+    def valid_vote?(number, event)
+      if number.to_i > event.users.count
+        send_message("#{I18n.t('max_number_of_teams')}")
+      elsif number.to_i < MIN_NUMBER_OF_MEMBERS
+        send_message("#{I18n.t('min_number_of_members')}")
+      else
+        block_given? && yield(number)
+      end
+    end
+
     def valid_time_format?(time)
       raise ArgumentError if Time.parse(time).to_date != ::Date.today
       true
