@@ -8,7 +8,9 @@ module BotCommand
     end
 
     def start
-      if event.members_count < event.user_limit
+      if event.started?
+        send_message("#{I18n.t('started_event')}")
+      elsif event.members_count < event.user_limit
         Guest.create(user: user, event: event)
         send_message(
           "#{username} позвал 1 Гостя на " \
