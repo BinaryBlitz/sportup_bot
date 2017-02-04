@@ -56,5 +56,5 @@ end
 desc 'Close vote'
 task :close_vote do
   AppConfigurator.new.configure
-  Event.all.map(&:close_vote) if Event.any?
+  Event.all.map(&:close_vote_on_time) if Event.any?
 end
