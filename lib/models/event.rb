@@ -42,9 +42,13 @@ class Event < ActiveRecord::Base
     user.memberships.where(event: self).first
   end
 
+  def started?
+    date_with_time(starts_at) <= Time.now
+  end
+
   private
 
   def close_time?
-    date_with_time(starts_at) <= Time.now
+    ((Time.now - date_with_time(starts_at)).to_i / 60).between?(0, 10)
   end
 end

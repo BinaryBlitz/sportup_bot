@@ -16,15 +16,20 @@ module Helper
         api.send_message(
           chat_id: chat_id,
           text: "За #{member_name(best_player.user)} уже отдано #{best_player.votes_count} " \
-          'голосов. Он побеждает с явным преимуществом!'
+                'голосов. Он побеждает с явным преимуществом!'
         )
+        update(closed: true)
       elsif remained_time <= 0 || memberships.sum(:votes_count) == users.count
         api.send_message(
           chat_id: chat_id,
           text: "Голование закончилось, победил #{member_name(best_player.user)}"
         )
+        update(closed: true)
       end
-      update(closed: true)
+    end
+
+    def close_vote_on_time
+      close_vote if remained_time <= 0
     end
 
     def vote_list

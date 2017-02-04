@@ -24,12 +24,15 @@ module BotCommand
         send_message("#{I18n.t('not_member')}")
         user.reset_next_bot_command
       end
+      event.close_vote
     end
 
     def number
       valid_vote?(text, event) do |number|
         vote(number.to_i)
+        user.reset_next_bot_command
       end
+      event.close_vote
     end
 
     def vote(number)
