@@ -29,7 +29,9 @@ class BotMessageDispatcher
 
   def process
     command = parse_command
-    if @message['message'].nil? || @message['message']['text'].nil?
+    if @message['edited_message']
+      BotCommand::Base.new(@user, @message).repeat_command
+    elsif @message['message']['text'].nil?
       BotCommand::Base.new(@user, @message).only_text
     elsif command_not_from_admin?(command)
       BotCommand::Unauthorized.new(@user, @message).start

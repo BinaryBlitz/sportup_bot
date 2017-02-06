@@ -33,6 +33,10 @@ module BotCommand
       send_message_with_reply("#{I18n.t('empty_text')}") if @message['message']['reply_to_message']
     end
 
+    def repeat_command
+      send_message("#{I18n.t('repeat_command')}")
+    end
+
     def event
       Event.find_by(chat_id: chat_id)
     end
@@ -57,6 +61,7 @@ module BotCommand
     end
 
     def chat_id
+      return @message['edited_message']['chat']['id'] if @message['edited_message']
       @message['message']['chat']['id'] unless @message['message'].nil?
     end
 
