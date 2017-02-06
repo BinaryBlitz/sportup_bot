@@ -9,7 +9,7 @@ module BotCommand
 
     def start
       number = text.gsub(/\/vote\s+/, '').to_i
-      if event.membership(user).voted
+      if event.membership(user) && event.membership(user).voted
         send_message("#{I18n.t('voted_already')}")
       elsif event.date_with_time(event.ends_at) > Time.now
         send_message("#{I18n.t('not_finished')}")
