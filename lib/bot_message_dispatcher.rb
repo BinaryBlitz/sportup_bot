@@ -21,6 +21,12 @@ class BotMessageDispatcher
     BotCommand::BestPlayer
   ].freeze
 
+  ADMIN_COMMANDS = [
+    BotCommand::Create,
+    BotCommand::Stop,
+    BotCommand::Randomize
+  ].freeze
+
   def initialize(message, user)
     @message = message
     @user = user
@@ -29,17 +35,16 @@ class BotMessageDispatcher
 
   def process
     command = parse_command
+    return BotCommand::Unauthorized.new(@user, @message).start unless admin?(command)
     if @message['edited_message']
       BotCommand::Base.new(@user, @message).repeat_command
     elsif @message['message']['text'].nil?
       BotCommand::Base.new(@user, @message).only_text
-    elsif command_not_from_admin?(command)
-      BotCommand::Unauthorized.new(@user, @message).start
     elsif command
+      @botan.track(command.to_s.gsub('BotCommand::', ''), @user.telegram_id, message: @message['message'])
       command = command.new(@user, @message)
       return command.send_message("#{I18n.t('no_events')}") unless event_exists?(command)
       command.start
-      @botan.track(@message['message']['text'], @message['message']['from']['id'])
     elsif next_bot_command
       execute_next_command_method(next_bot_command)
     else
@@ -57,12 +62,8 @@ class BotMessageDispatcher
     command.event || command.class == BotCommand::Create || command.class == BotCommand::Help
   end
 
-  def commands_for_admin?(command)
-    command == BotCommand::Create || command == BotCommand::Stop || command == BotCommand::Randomize
-  end
-
-  def command_not_from_admin?(command)
-    commands_for_admin?(command) && !BotCommand::Base.new(@user, @message).admin?
+  def admin?(command)
+    ADMIN_COMMANDS.include?(command) || BotCommand::Base.new(@user, @message).admin?
   end
 
   def next_bot_command
