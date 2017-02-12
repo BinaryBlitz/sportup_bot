@@ -15,6 +15,8 @@ class TelegramBot
   end
 
   def from
+    return @webhook_message['channel_post']['from'] if  @webhook_message['channel_post']
+    return if @webhook_message['edited_channel_post']
     if @webhook_message['callback_query'].nil?
       @webhook_message['message'].nil? ? @webhook_message['edited_message']['from'] : @webhook_message['message']['from']
     else

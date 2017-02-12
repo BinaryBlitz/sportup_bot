@@ -74,7 +74,7 @@ module BotCommand
     end
 
     def private_chat?
-      @message['message']['chat']['type'] == 'private'
+      @message['message']['chat']['type'] == 'private' unless @message['message'].nil?
     end
   end
 end

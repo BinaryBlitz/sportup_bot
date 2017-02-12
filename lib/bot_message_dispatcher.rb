@@ -35,6 +35,7 @@ class BotMessageDispatcher
 
   def process
     command = parse_command
+    return if @message['channel_post'] || @message['edited_channel_post']
     return BotCommand::Unauthorized.new(@user, @message).start unless admin?(command)
     if @message['edited_message']
       BotCommand::Base.new(@user, @message).repeat_command
@@ -63,7 +64,8 @@ class BotMessageDispatcher
   end
 
   def admin?(command)
-    ADMIN_COMMANDS.include?(command) || BotCommand::Base.new(@user, @message).admin?
+    return true unless ADMIN_COMMANDS.include?(command)
+    BotCommand::Base.new(@user, @message).admin?
   end
 
   def next_bot_command
