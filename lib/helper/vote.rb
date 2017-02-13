@@ -12,6 +12,7 @@ module Helper
 
     def close_vote
       best_player = memberships.order('votes_count DESC').first
+      return close_with_no_members if remained_time <= 0 && best_player.nil?
       if best_player.votes_count > users.count / 2
         api.send_message(
           chat_id: chat_id,
@@ -26,6 +27,14 @@ module Helper
         )
         update(closed: true)
       end
+    end
+
+    def close_event_with_no_members
+      api.send_message(
+        chat_id: chat_id,
+        text: "#{I18n.t('end_of_vote')}"
+      )
+      update(closed: true)
     end
 
     def close_vote_on_time
