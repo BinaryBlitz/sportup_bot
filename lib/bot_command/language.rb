@@ -15,7 +15,7 @@ module BotCommand
     end
 
     def set_lang
-      valid_lang?(text) do |lang|
+      valid_lang?(text, user) do |lang|
         chat.update(language: AVAILABLE_LANGS.key(lang))
         send_message("Ваш язык выбран: #{AVAILABLE_LANGS[chat.language.to_sym]}")
         user.reset_next_bot_command

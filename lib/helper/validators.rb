@@ -72,11 +72,14 @@ module Helper
       false
     end
 
-    def valid_lang?(lang)
+    def valid_lang?(lang, user)
       unless AVAILABLE_LANGS.values.include?(lang)
         send_message("#{I18n.t('invalid_lang')}")
+        user.reset_next_bot_command
+        false
+      else
+        block_given? && yield(lang)
       end
-      block_given? && yield(lang)
     end
   end
 end
