@@ -11,6 +11,8 @@ class Event < ActiveRecord::Base
 
   default_scope { where(closed: false) }
 
+  belongs_to :chat
+
   has_many :users, through: :memberships
   has_many :memberships, dependent: :destroy
   has_many :guests, dependent: :destroy
@@ -21,7 +23,8 @@ class Event < ActiveRecord::Base
 
   def close
     if close_time?
-      api.send_message(chat_id: chat_id, text: "#{I18n.t('farewell_message')}")
+      I18n.locale = lang
+      api.send_message(chat_id: chat.chat_id, text: "#{I18n.t('farewell_message')}")
     end
   end
 
@@ -44,6 +47,10 @@ class Event < ActiveRecord::Base
 
   def started?
     date_with_time(starts_at) <= Time.now
+  end
+
+  def lang
+    chat.language.to_sym
   end
 
   private
