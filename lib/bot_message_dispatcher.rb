@@ -35,6 +35,8 @@ class BotMessageDispatcher
 
   def process
     command = parse_command
+    set_i18n if language
+    return BotCommand::Language.new(@user, @message).start unless next_bot_command == 'set_lang' || language
     return if @message['channel_post'] || @message['edited_channel_post']
     return BotCommand::Unauthorized.new(@user, @message).start unless admin?(command)
     if @message['edited_message']
@@ -66,6 +68,15 @@ class BotMessageDispatcher
   def admin?(command)
     return true unless ADMIN_COMMANDS.include?(command)
     BotCommand::Base.new(@user, @message).admin?
+  end
+
+  def language
+    Chat.find_or_create_by(chat_id: @message['message']['chat']['id']).language
+  end
+
+  def set_i18n
+    I18n.enforce_available_locales = false
+    I18n.locale = language.to_sym
   end
 
   def next_bot_command
