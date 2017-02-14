@@ -6,6 +6,7 @@ require 'yaml'
 require './lib/models/event'
 require './lib/models/membership'
 require './lib/models/user'
+require './lib/models/chat'
 require './app_configurator'
 
 namespace :db do
