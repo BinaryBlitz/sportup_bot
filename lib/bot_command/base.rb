@@ -38,7 +38,11 @@ module BotCommand
     end
 
     def event
-      Event.find_by(chat_id: chat_id)
+      Event.find_by(chat: chat)
+    end
+
+    def chat
+      Chat.find_or_create_by(chat_id: chat_id)
     end
 
     def send_message(text, options = {})
