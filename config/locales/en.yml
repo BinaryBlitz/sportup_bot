@@ -1,0 +1,88 @@
+en:
+  help_message: |
+    Available commands:
+    /help — Commands list
+    /create — Create game
+    /stop — Stop game
+    /in — Participate in a game
+    /out — Cancel participation in a game
+    /add — Add guest to the list
+    /delete — Delete guest from the list
+    /list — View game info and list of participants
+    /randomize — Divide participants into teams
+    /teams — View teams lists
+    /vote — Vote for the best player of the game
+    /bestplayer — View votes results
+  info_message: |
+    Confirm your participation in a game:
+    /in — If you are going to participate
+    /out — If you are NOT going to participate
+    /list — View list of participants
+    /add — Add guest to the list
+    /delete — Delete guest from the list
+  no_guests: 'There are no more guests with you'
+  full_event: 'Sorry, but there are no more places available now.
+              Stay in touch, maybe you will get chance later.'
+  no_events: 'No games available now'
+  no_teams: 'You should divide into teams first. Use /randomize command.'
+  existing_event: 'You already have game now. Use /stop, and then /create to be able to start a new game.'
+  end_of_vote: 'Voting is over!'
+  farewell_message: 'Good luck! Thx for using our bot'
+  event_cancellation: 'Game is cancelled'
+  invalid_date: 'Enter date in this exact form- dd.mm.yyyy'
+  past_date: 'You have entered past date or wrong date form.'
+  past_time: 'You have entered past time or wrong time form.'
+  invalid_time: 'Enter time in this exact form - hh:mm'
+  invalid_length: 'No more than 100 symbols.'
+  empty_text: 'Enter text.'
+  repeat_command: 'Try again, a do not understand you.'
+  max_number_of_members: 'Max number of participants is 1000.'
+  min_number_of_members: 'You have entered not a number or number under 1'
+  max_number_of_teams: 'You have entered greater number than number of participants.'
+  undefined_message: 'Use /help command to see what I can do.'
+  not_admin: 'Sorry, you are not an administrator of the group.'
+  not_member: 'Only last game participants can take part in vote.'
+  voted_already: 'You have already voted.'
+  not_finished: 'Game has not finished yet.'
+  participants: 'participants'
+  goes: 'Goes'
+  participates: 'Participates'
+  will_attend: 'will attend'
+  will_not_attend: 'will not attend'
+  invited_guest: 'invited 1 Guest to'
+  deleted_guest: 'deleted Guest to'
+  number_of_teams: 'Enter number of teams'
+  teams_list: 'List of members is devided this way'
+  votes: 'votes'
+  for: 'For'
+  best_player: 'Choose best player of the match'
+  guest: 'Guest'
+  team: 'Team'
+  voted_for: 'voted for'
+  minutes: 'minutes'
+  hours: 'hours'
+  has: 'has'
+  vote_ending: 'Vote has ended, won'
+  clear_advantage: 'wins with a clear advantage!'
+  already_given: 'already given'
+  distribution_of_votes: 'Distribution of votes at the moment'
+  end_of_voting_left: 'Until the end of voting left'
+  self_voting: 'You can not vote for yourself.'
+  vote_note: "Use /vote N, where N –serial number of candidate. \n
+             Vote will end when all voters choose their candidates or after 24 hours pass. \n\n"
+  started_event: 'Game already started'
+  number: 'Enter serial number of candidate.'
+  name:       Vote will end when all voters choose their candidates or after 24 hours pass. \n\n"
+  started_event: 'Game already started'
+  number: 'Enter serial number of candidate.'
+  name: 'What Is game name?'
+  address: 'What is the address?'
+  starting_date: 'What is the date?'
+  starts_at: 'Beginning time?'
+  ends_at: 'End time?'
+  user_limit: 'Number of participants?'
+  time:
+    formats:
+      default: '%d.%m.%Y'
+      long: '%d %m %Y %H:%M'
+      short: '%H:%M'
