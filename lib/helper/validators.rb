@@ -3,6 +3,7 @@ require 'time'
 module Helper
   module Validators
     include Date
+    include Buttons
 
     MAX_TEXT_LENGTH = 100
     MAX_NUMBER_OF_MEMBERS = 1000
@@ -69,6 +70,13 @@ module Helper
     rescue
       send_message_with_reply("#{I18n.t('invalid_time')}")
       false
+    end
+
+    def valid_lang?(lang)
+      unless AVAILABLE_LANGS.values.include?(lang)
+        send_message("#{I18n.t('invalid_lang')}")
+      end
+      block_given? && yield(lang)
     end
   end
 end
