@@ -60,7 +60,7 @@ module Helper
           end
         end
         team_list.each.with_index(1) { |member, i| member.prepend("#{i}.") }
-        list << "Команда #{i}:\n#{team_list.join("\n")}"
+        list << "#{I18n.t('team')} #{i}:\n#{team_list.join("\n")}"
       end
       list.join("\n\n")
     end
@@ -75,7 +75,7 @@ module Helper
         end
       end
       team.each.with_index(1) { |member, i| member.prepend("#{i}.") }
-      list << "Команда #{team_number}:\n#{team.join("\n")}"
+      list << "#{I18n.t('team')} #{team_number}:\n#{team.join("\n")}"
     end
 
     def member_name(member)
@@ -83,7 +83,7 @@ module Helper
     end
 
     def guest_name(member)
-      member.user.username.present? ? "Гость @#{member.user.name}" : "Гость #{member.user.first_name}"
+      member.user.username.present? ? "#{I18n.t('guest')} @#{member.user.name}" : "#{I18n.t('guest')} #{member.user.first_name}"
     end
   end
 end
