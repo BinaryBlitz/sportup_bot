@@ -13,9 +13,9 @@ module BotCommand
       elsif user.guests.where(event: event).any?
         user.guests.where(event: event).last.delete
         send_message(
-          "#{username} удалил Гостя на " \
+          "#{username} #{I18n.t('deleted_guest')} " \
           "#{I18n.l(event.starting_date)} #{event.name} " \
-          "Участвует #{event.members_count}/#{event.user_limit}"
+          "#{I18n.t('participates')} #{event.members_count}/#{event.user_limit}"
         )
       else
         send_message("#{I18n.t('no_guests')}")

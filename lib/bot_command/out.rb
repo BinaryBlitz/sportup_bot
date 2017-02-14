@@ -13,9 +13,9 @@ module BotCommand
       else
         event.users.destroy(user) if event.users.include?(user)
         send_message(
-          "#{username} не будет присутствовать на " \
+          "#{username} #{I18n.t('will_not_attend')} " \
           "#{I18n.l(event.starting_date)} #{event.name} " \
-          "Участвует #{event.members_count}/#{event.user_limit}"
+          "#{I18n.t('participates')} #{event.members_count}/#{event.user_limit}"
         )
       end
       user.reset_next_bot_command

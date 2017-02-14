@@ -20,7 +20,7 @@ module BotCommand
 
     def name
       valid_length? text do |name|
-        event = Event.new(name: name, chat_id: chat_id)
+        event = Event.new(name: name, chat: chat)
         send_message_with_reply("#{I18n.t('address')}")
         user.set_next_bot_command({ method: :address , class: self.class.to_s, event: event })
       end
@@ -73,7 +73,7 @@ module BotCommand
       "#{I18n.l(event.starting_date)} #{event.name} \n" \
       "#{event.address} \n" \
       "#{event.starts_at.strftime("%H:%M")} - #{event.ends_at.strftime("%H:%M")} \n" \
-      "#{event.user_limit} участников \n" \
+      "#{event.user_limit} #{I18n.t('participants')} \n" \
       "#{I18n.t('info_message')}"
     end
   end

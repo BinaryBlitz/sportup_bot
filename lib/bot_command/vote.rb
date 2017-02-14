@@ -41,8 +41,9 @@ module BotCommand
       candidate_name = event.member_name(candidate)
       event.upvote(candidate, user)
       send_message(
-        "#{event.member_name(user)} проголосовал за #{candidate_name}. " \
-        "У #{candidate_name} #{event.membership(candidate).votes_count}/#{event.users.count} голосов."
+        "#{event.member_name(user)} #{I18n.t('voted_for')} #{candidate_name}. " \
+        "#{I18n.t('preposition', default: '')}#{candidate_name} #{I18n.t('has', default: '')} " \
+        "#{event.membership(candidate).votes_count}/#{event.users.count} #{I18n.t('votes')}."
       )
       user.reset_next_bot_command
     end
