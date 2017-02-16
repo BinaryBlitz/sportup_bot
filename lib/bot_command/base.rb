@@ -14,11 +14,11 @@ module BotCommand
     end
 
     def should_start?
-      fail NotImplementedError, 'Implementation of Base::should_start? method doesn\'t exist'
+      fail NotImplementedError, "Implementation of Base::should_start? method doesn't exist"
     end
 
     def start
-      fail NotImplementedError, 'Implementation of Base::start method doesn\'t exist'
+      fail NotImplementedError, "Implementation of Base::start method doesn't exist"
     end
 
     def admin?
@@ -61,12 +61,11 @@ module BotCommand
     end
 
     def text
-      @message['message']['text'] unless @message['message'].nil?
+      @message&.dig('message', 'text')
     end
 
     def chat_id
-      return @message['edited_message']['chat']['id'] if @message['edited_message']
-      @message['message']['chat']['id'] unless @message['message'].nil?
+      @message&.dig('message', 'chat', 'id') || @message&.dig('edited_message', 'chat', 'id')
     end
 
     def bot_name
@@ -78,7 +77,11 @@ module BotCommand
     end
 
     def private_chat?
-      @message['message']['chat']['type'] == 'private' unless @message['message'].nil?
+      @message&.dig('message', 'chat', 'type') == 'private'
+    end
+
+    def command_without_params?(text, command)
+      text.split(command).empty? || text.split("#{command}@#{bot_name}").empty?
     end
   end
 end

@@ -9,17 +9,15 @@ module BotCommand
 
     def start
       number = text.gsub(/\/vote\s+/, '').to_i
-      if event.membership(user) && event.membership(user).voted
+      if event&.membership(user)&.voted
         send_message("#{I18n.t('voted_already')}")
       elsif event.date_with_time(event.ends_at) > Time.now
         send_message("#{I18n.t('not_finished')}")
-      elsif event.members.include?(user) && (text.split('/vote').empty? || text.split("/vote@#{bot_name}").empty?)
+      elsif event.members.include?(user) && command_without_params?(text, '/vote')
         send_message_with_reply("#{I18n.t('number')}")
         user.set_next_bot_command({ method: :number, class: self.class.to_s })
       elsif event.members.include?(user)
-        valid_vote?(number, event) do |number|
-          vote(number)
-        end
+        valid_vote?(number, event) { |number| vote(number) }
       else
         send_message("#{I18n.t('not_member')}")
         user.reset_next_bot_command

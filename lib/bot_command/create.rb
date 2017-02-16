@@ -43,18 +43,16 @@ module BotCommand
     end
 
     def starts_at
-      event = Event.new(user.bot_command_data['event'])
       valid_time?(event, text) do |starts_at|
-        event.starts_at = starts_at
+        event = user.bot_command_data['event'].update(starts_at: starts_at)
         send_message_with_reply("#{I18n.t('ends_at')}")
         user.set_next_bot_command({ method: :ends_at , class: self.class.to_s, event: event })
       end
     end
 
     def ends_at
-      event = Event.new(user.bot_command_data['event'])
       valid_time?(event, text) do |ends_at|
-        event.ends_at = ends_at
+        event = user.bot_command_data['event'].update(ends_at: ends_at)
         send_message_with_reply("#{I18n.t('user_limit')}")
         user.set_next_bot_command({ method: :user_limit , class: self.class.to_s, event: event })
       end

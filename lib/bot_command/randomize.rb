@@ -8,7 +8,7 @@ module BotCommand
     end
 
     def start
-      if text.split('/randomize').empty? || text.split("/randomize@#{bot_name}").empty?
+      if command_without_params?(text, '/randomize')
         send_message_with_reply("#{I18n.t('number_of_teams')}")
         user.set_next_bot_command({ method: :number, class: self.class.to_s })
       else
