@@ -35,19 +35,15 @@ class BotMessageDispatcher
 
   def process
     return if @message['channel_post'] || @message['edited_channel_post']
-    command = parse_command
     set_i18n if language
-    return BotCommand::Language.new(@user, @message).start unless next_bot_command == 'set_lang' || language
-    return BotCommand::Unauthorized.new(@user, @message).start unless admin?(command)
+    return BotCommand::Language.new(@user, @message).start unless has_language?
+    return BotCommand::Unauthorized.new(@user, @message).start unless admin?(parse_command)
     if @message['edited_message']
       BotCommand::Base.new(@user, @message).repeat_command
     elsif @message['message']['text'].nil?
       BotCommand::Base.new(@user, @message).only_text
-    elsif command
-      @botan.track(command.to_s.gsub('BotCommand::', ''), @user.telegram_id, message: @message['message'])
-      command = command.new(@user, @message)
-      return command.send_message("#{I18n.t('no_events')}") unless event_exists?(command)
-      command.start
+    elsif parse_command
+      command_process(parse_command)
     elsif next_bot_command
       execute_next_command_method(next_bot_command)
     else
@@ -70,8 +66,23 @@ class BotMessageDispatcher
     BotCommand::Base.new(@user, @message).admin?
   end
 
+  def has_language?
+    next_bot_command == 'set_lang' || language
+  end
+
+  def command_process(command)
+    @botan.track(command.to_s.gsub('BotCommand::', ''), @user.telegram_id, message: @message['message'])
+    command = command.new(@user, @message)
+    return command.send_message("#{I18n.t('no_events')}") unless event_exists?(command)
+    command.start
+  end
+
   def language
-    Chat.find_or_create_by(chat_id: @message['message']['chat']['id']).language
+    Chat.find_or_create_by(chat_id: chat_id).language
+  end
+
+  def chat_id
+    @message&.dig('message', 'chat', 'id') || @message&.dig('edited_message', 'chat', 'id')
   end
 
   def set_i18n
