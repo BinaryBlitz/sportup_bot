@@ -14,6 +14,7 @@ module Helper
     end
 
     def valid_time?(event, time)
+      event = Event.new(user.bot_command_data['event'])
       yield(time) if valid_time_format?(time) && present_time?(event, time) && block_given?
     end
 
