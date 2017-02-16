@@ -28,10 +28,7 @@ module Helper
     end
 
     def number_of_teams
-      return 0 if memberships.maximum(:team_number).nil? && guests.maximum(:team_number).nil?
-      return memberships.maximum(:team_number) if guests.maximum(:team_number).nil?
-      return guests.maximum(:team_number) if memberships.maximum(:team_number).nil?
-      [guests.maximum(:team_number), memberships.maximum(:team_number)].max
+      [guests.maximum(:team_number), memberships.maximum(:team_number)].max_by(&:to_i)
     end
 
     def random_team_formation(members, number)
