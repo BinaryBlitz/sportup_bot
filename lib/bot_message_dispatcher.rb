@@ -36,8 +36,8 @@ class BotMessageDispatcher
   def process
     return if @message['channel_post'] || @message['edited_channel_post']
     set_i18n if language
-    return BotCommand::Language.new(@user, @message).start unless has_language?
-    return BotCommand::Unauthorized.new(@user, @message).start unless admin?(parse_command)
+    return BotCommand::Language.new(@user, @message).start if admin? && has_no_language?
+    return BotCommand::Unauthorized.new(@user, @message).start unless command_for_admin?(parse_command)
     if @message['edited_message']
       BotCommand::Base.new(@user, @message).repeat_command
     elsif @message['message']['text'].nil?
@@ -61,13 +61,17 @@ class BotMessageDispatcher
     command.event || command.class == BotCommand::Create || command.class == BotCommand::Help
   end
 
-  def admin?(command)
-    return true unless ADMIN_COMMANDS.include?(command)
+  def admin?
     BotCommand::Base.new(@user, @message).admin?
   end
 
-  def has_language?
-    next_bot_command == 'set_lang' || language
+  def command_for_admin?(command)
+    return true unless ADMIN_COMMANDS.include?(command)
+    admin?
+  end
+
+  def has_no_language?
+    language.nil? && next_bot_command != 'set_lang'
   end
 
   def command_process(command)
