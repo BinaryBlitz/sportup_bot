@@ -23,7 +23,7 @@ class Event < ActiveRecord::Base
 
   def close
     if close_time?
-      I18n.locale = lang
+      I18n.locale = lang if lang
       api.send_message(chat_id: chat.chat_id, text: "#{I18n.t('farewell_message')}")
     end
   end
@@ -50,7 +50,7 @@ class Event < ActiveRecord::Base
   end
 
   def lang
-    chat.language.to_sym
+    chat.language.to_sym if chat&.language
   end
 
   private

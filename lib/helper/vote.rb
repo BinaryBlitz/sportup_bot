@@ -1,7 +1,7 @@
 module Helper
   module Vote
     def begin_vote
-      I18n.locale = lang
+      I18n.locale = lang if lang
       if ((Time.now - date_with_time(ends_at)).to_i / 60).between?(0, 10)
         api.send_message(
           chat_id: chat.chat_id,
@@ -12,9 +12,9 @@ module Helper
     end
 
     def close_vote
-      I18n.locale = lang
+      I18n.locale = lang if lang
       best_player = memberships.order('votes_count DESC').first
-      return close_with_no_members if remained_time <= 0 && best_player.nil?
+      return close_event_with_no_members if remained_time <= 0 && best_player.nil?
       if best_player.votes_count > users.count / 2
         api.send_message(
           chat_id: chat.chat_id,
@@ -32,7 +32,7 @@ module Helper
     end
 
     def close_event_with_no_members
-      I18n.locale = lang
+      I18n.locale = lang if lang
       api.send_message(
         chat_id: chat.chat_id,
         text: "#{I18n.t('end_of_vote')}"
