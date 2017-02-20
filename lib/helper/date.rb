@@ -1,6 +1,7 @@
 module Helper
   module Date
     DATE_FORMAT = /\A[0-3]{1}[0-9]{1}\.[0-1]{1}[0-9]{1}\.[1-2]{1}[0-9]{3}\z/
+    TIME_FORMAT = /\A[0-2]{1}[0-9]{1}:[0-5]{1}[0-9]{1}\z/
     MINUTES_IN_HOUR = 60
     SECONDS_IN_HOUR = 3600
     HOURS_IN_DAY = 24
@@ -28,7 +29,10 @@ module Helper
 
     def add_time_to_date(date, time)
       time = time.split(':').map(&:to_i)
-      date + time[0]*SECONDS_IN_HOUR + time[1]*MINUTES_IN_HOUR
+      hours = time[0] * SECONDS_IN_HOUR
+      minutes = time[1] * MINUTES_IN_HOUR
+      return date + hours + minutes if minutes
+      date + hours
     end
 
     def end_of_voting_time
