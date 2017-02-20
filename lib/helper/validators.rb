@@ -66,7 +66,7 @@ module Helper
     end
 
     def valid_time_format?(time)
-      raise ArgumentError if Time.parse(time).to_date != ::Date.today
+      raise ArgumentError if (time =~ TIME_FORMAT).nil? || Time.parse(time).to_date != ::Date.today
       true
     rescue
       send_message_with_reply("#{I18n.t('invalid_time')}")
