@@ -47,6 +47,8 @@ module BotCommand
 
     def send_message(text, options = {})
       @api.send_message({ chat_id: chat_id, text: text }.update(options))
+    rescue Telegram::Bot::Exceptions::ResponseError => e
+      return
     end
 
     protected
