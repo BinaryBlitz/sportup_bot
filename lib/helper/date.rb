@@ -1,13 +1,12 @@
 module Helper
   module Date
-    DATE_FORMAT = /\A[0-3]{1}[0-9]{1}\.[0-1]{1}[0-9]{1}\.[1-2]{1}[0-9]{3}\z/
     TIME_FORMAT = /\A[0-2]{1}[0-9]{1}:[0-5]{1}[0-9]{1}\z/
     MINUTES_IN_HOUR = 60
     SECONDS_IN_HOUR = 3600
     HOURS_IN_DAY = 24
 
     def present_date?(date)
-      if ::Date.parse(date) >= ::Date.today
+      if ::Date.parse(format(date).to_s) >= ::Date.today
         true
       else
         send_message_with_reply("#{I18n.t('past_date')}")
@@ -41,6 +40,10 @@ module Helper
 
     def remained_time
       (end_of_voting_time - Time.now).to_i / MINUTES_IN_HOUR
+    end
+
+    def format(date)
+      ::Date.strptime(date, '%d.%m.%Y')
     end
   end
 end

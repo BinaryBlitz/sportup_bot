@@ -19,12 +19,10 @@ module Helper
     end
 
     def valid_date_format?
-      if (text =~ DATE_FORMAT).nil?
-        send_message_with_reply("#{I18n.t('invalid_date')}")
-        false
-      else
-        true
-      end
+      true if format(text)
+    rescue
+      send_message_with_reply("#{I18n.t('invalid_date')}")
+      false
     end
 
     def valid_length?(text)
