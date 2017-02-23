@@ -3,10 +3,10 @@ module Helper
     def begin_vote
       I18n.locale = lang if lang
       if ((Time.now - date_with_time(ends_at)).to_i / 60).between?(0, 10)
-        api.send_message(
-          chat_id: chat.chat_id,
-          text: "#{I18n.t('best_player')}: \n" \
-          "#{users_list.join("\n")} \n\n#{I18n.t('vote_note')}"
+        BotCommand::Base.new.send_message(
+          "#{I18n.t('best_player')}: \n" \
+          "#{users_list.join("\n")} \n\n#{I18n.t('vote_note')}",
+          chat_id: chat.chat_id
         )
       end
     end
@@ -16,16 +16,17 @@ module Helper
       best_player = memberships.order('votes_count DESC').first
       return close_event_with_no_members if remained_time <= 0 && best_player.nil?
       if best_player.votes_count > users.count / 2
-        api.send_message(
-          chat_id: chat.chat_id,
-          text: "#{I18n.t('for')} #{member_name(best_player.user)} #{I18n.t('already_given')} #{best_player.votes_count} " \
-          "#{I18n.t('votes')}. #{I18n.t('clear_advantage')}"
+        BotCommand::Base.new.send_message(
+          "#{I18n.t('for')} #{member_name(best_player.user)} #{I18n.t('already_given')} " \
+          "#{best_player.votes_count} " \
+          "#{I18n.t('votes')}. #{I18n.t('clear_advantage')}",
+          chat_id: chat.chat_id
         )
         update(closed: true)
       elsif remained_time <= 0 || memberships.sum(:votes_count) == users.count
-        api.send_message(
-          chat_id: chat.chat_id,
-          text: "#{I18n.t('vote_ending')} #{member_name(best_player.user)}"
+        BotCommand::Base.new.send_message(
+          "#{I18n.t('vote_ending')} #{member_name(best_player.user)}",
+          chat_id: chat.chat_id
         )
         update(closed: true)
       end
@@ -33,10 +34,7 @@ module Helper
 
     def close_event_with_no_members
       I18n.locale = lang if lang
-      api.send_message(
-        chat_id: chat.chat_id,
-        text: "#{I18n.t('end_of_vote')}"
-      )
+      BotCommand::Base.new.send_message(I18n.t('end_of_vote'), chat_id: chat.chat_id)
       update(closed: true)
     end
 

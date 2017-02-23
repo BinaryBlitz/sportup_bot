@@ -1,13 +1,11 @@
 require 'active_record'
-require 'telegram/bot'
 require './lib/helper'
-require './environment'
+require './lib/bot_command/base'
 
 class Event < ActiveRecord::Base
   include Helper::Date
   include Helper::Teams
   include Helper::Vote
-  include Environment
 
   default_scope { where(closed: false) }
 
@@ -17,14 +15,10 @@ class Event < ActiveRecord::Base
   has_many :memberships, dependent: :destroy
   has_many :guests, dependent: :destroy
 
-  def api
-    Telegram::Bot::Api.new(token)
-  end
-
   def close
     if close_time?
       I18n.locale = lang if lang
-      api.send_message(chat_id: chat.chat_id, text: "#{I18n.t('farewell_message')}")
+      BotCommand::Base.new.send_message( I18n.t('farewell_message'), chat_id: chat.chat_id)
     end
   end
 

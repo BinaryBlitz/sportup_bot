@@ -7,7 +7,7 @@ module BotCommand
   class Base
     attr_reader :user, :message, :api
 
-    def initialize(user, message)
+    def initialize(user={}, message={})
       @user = user
       @message = message
       @api = Telegram::Bot::Api.new(Environment.token)
