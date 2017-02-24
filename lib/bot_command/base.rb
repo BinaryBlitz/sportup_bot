@@ -23,10 +23,11 @@ module BotCommand
 
     def admin?
       return true if private_chat?
-      return false unless @user
       admins = @api.getChatAdministrators(chat_id: chat_id)
       admin_ids = admins['result'].map { |user| user['user']['id'] }
       admin_ids.include?(@user.telegram_id.to_i) ? true : false
+    rescue Telegram::Bot::Exceptions::ResponseError
+      return
     end
 
     def only_text
@@ -47,7 +48,7 @@ module BotCommand
 
     def send_message(text, options = {})
       @api.send_message({ chat_id: chat_id, text: text }.update(options))
-    rescue Telegram::Bot::Exceptions::ResponseError => e
+    rescue Telegram::Bot::Exceptions::ResponseError
       return
     end
 
