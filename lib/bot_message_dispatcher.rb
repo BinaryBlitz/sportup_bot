@@ -27,6 +27,12 @@ class BotMessageDispatcher
     BotCommand::Randomize
   ].freeze
 
+  ALLOWED_COMMANDS = [
+    BotCommand::Start,
+    BotCommand::Help,
+    BotCommand::Create
+  ].freeze
+
   def initialize(message, user)
     @message = message
     @user = user
@@ -58,7 +64,7 @@ class BotMessageDispatcher
   end
 
   def event_exists?(command)
-    command.event || command.class == BotCommand::Create || command.class == BotCommand::Help
+    command.event || ALLOWED_COMMANDS.include?(command.class)
   end
 
   def admin?
