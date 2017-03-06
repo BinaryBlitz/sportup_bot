@@ -73,9 +73,6 @@ en:
              Vote will end when all voters choose their candidates or after 24 hours pass. \n\n"
   started_event: 'Game already started'
   number: 'Enter serial number of candidate.'
-  name:       Vote will end when all voters choose their candidates or after 24 hours pass. \n\n"
-  started_event: 'Game already started'
-  number: 'Enter serial number of candidate.'
   name: 'What Is game name?'
   address: 'What is the address?'
   starting_date: 'What is the date?'

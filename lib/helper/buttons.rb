@@ -4,7 +4,8 @@ module Helper
   module Buttons
     AVAILABLE_LANGS = {
       en: 'English',
-      ru: 'Русский'
+      ru: 'Русский',
+      de: 'Deutsch'
     }
 
     def keyboard_buttons(button_list)

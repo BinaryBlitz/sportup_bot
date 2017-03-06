@@ -1,0 +1,86 @@
+de:
+  help_message: |
+    Menü:
+    /help — Übersicht der Befehle
+    /create — neues Spiel starten
+    /stop — das laufende Spiel anhalten
+    /in — beim Spiel teilnehmen
+    /out — Teilnahme am Spiel abbrechen
+    /add — einen Gast zum Spiel einladen
+    /delete — einen Gast entfernen
+    /list — Spielerliste und Infos zum Spiel anzeigen
+    /randomize — Spieler in Teams aufteilen
+    /teams — Teams anzeigen
+    /vote — Abstimmung über besten Spieler starten.
+    /bestplayer — Ergebnisse der Abstimmung anzeigen.
+  info_message: |
+    Spieleranzahl wurde erreicht. Bist du sicher dabei?:
+    /in — auf jeden Fall
+    /out — ich bin raus
+    /list — Spielerliste einsehen
+    /add — einen Gast einladen
+    /delete — einen Gast entfernen
+  no_guests: 'keine Gäste mehr vorhanden'
+  full_event: 'es tut uns Leid, die maximale Spieleranzahl ist erreicht.
+              Aber gib nicht auf, bleib immer aktuell. Denn es könnte sein, dass jemand spontan absagt.'
+  no_events: 'zur Zeit sind keine Veranstaltungen geplant'
+  no_teams: 'es fand noch keine Aufteilung in Teams statt'
+  end_of_vote: 'Abstimmung wurde beendet'
+  existing_event: 'du hast schon ein laufendes Spiel. Um ein neues Spiel zu starten wähle /stop aus.'
+  farewell_message: 'wir wünschen euch viel Spaß! Vielen Dank, dass du unseren Bot zur Hilfe nutzt. :) '
+  event_cancellation: 'das Spiel wurde abgesagt'
+  invalid_date: 'Datumsformat - dd.mm.yyyy'
+  past_date: 'ungültige  Datumsangabe '
+  past_time: 'ungültige Zeitangabe'
+  invalid_time: 'Zeitformat hh:mm'
+  invalid_length: 'Der Text darf nicht mehr als 100 Zeichen haben.'
+  empty_text: 'bitte Text einfügen'
+  repeat_command: ' Leider kann ich deine Eingabe nicht zuordnen. Gib bitte erneut deinen Befehl ein'
+  max_number_of_members: 'Anzahl von 1000 Spielern wurde überschritten'
+  min_number_of_members: 'mind. ein Spieler muss vorhanden sein. Gib erneut die Zahlen ein.'
+  max_number_of_teams: 'die Eingabe stimmt nicht mit der Spieleranzahl überein'
+  undefined_message: 'wähle /help aus um die Übersicht aller Befehle zu erhalten.'
+  not_admin: 'du bist kein Administrator dieser Gruppe '
+  not_member: 'nur Teilnehmer dürfen ihre Stimme abgeben'
+  invalid_lang: 'wähle deine Sprache aus'
+  voted_already: 'du hast schon abgestimmt '
+  not_finished: 'das Spiel wurde noch nicht beendet'
+  self_voting: 'du darfst nicht für dich selbst abstimmen'
+  participants: 'Spieler'
+  goes: 'spielen mit'
+  participates: 'läuft'
+  invited_guest: 'hat einen Gast eingeladen zum'
+  deleted_guest: 'hat einen Gast entfernt für '
+  will_attend: 'nimmt Teil am'
+  will_not_attend: 'nimmt nicht Teil am'
+  number_of_teams: 'Wieviele Teams?'
+  teams_list: 'die Teams wurden aufgeteilt wie folgt'
+  votes: 'Stimmen'
+  for: 'für'
+  best_player: 'wähle den top Spieler aus'
+  guest: 'Gast '
+  team: 'Team'
+  voted_for: 'abgestimmt für'
+  minutes: 'Minuten'
+  hours: 'Stunden'
+  preposition: 'bei'
+  vote_ending: 'die Abstimmung ist zur Ende. Der Gewinner ist'
+  clear_advantage: 'führt mit deutlichem Abstand'
+  already_given: 'wurde vergeben'
+  distribution_of_votes: 'Übersicht der vergebenen Stimmen'
+  end_of_voting_left: 'Die Abstimmung noch abwarten'
+  vote_note: "wähle /vote X, wobei das X steht für die Spielernummer. \n
+              die Abstimmung  wird beendet wenn alle ihre Stimme abgegeben haben. Oder nach Ablauf von 24 Stunden. \n\n"
+  started_event: 'das Spiel ist bereits gestartet'
+  number: 'gib die Spielernummer ein'
+  name: 'wie heißt das Spiel?'
+  address: 'wo findet es statt?'
+  starting_date: 'wann?'
+  starts_at: 'Uhrzeit, Beginn des Spiels?'
+  ends_at: 'Uhrzeit, Ende des Spiels?'
+  user_limit: 'Wieviele Spieler dürfen teilnehmen?'
+  time:
+    formats:
+      default: '%d.%m.%Y'
+      long: '%d %m %Y %H:%M'
+      short: '%H:%M'
