@@ -15,7 +15,7 @@ module Helper
       I18n.locale = lang if lang
       best_player = memberships.order('votes_count DESC').first
       return close_event_with_no_members if remained_time <= 0 && best_player.nil?
-      if best_player.votes_count > users.count / 2
+      if best_player && best_player.votes_count > users.count / 2
         BotCommand::Base.new.send_message(
           "#{I18n.t('for')} #{member_name(best_player.user)} #{I18n.t('already_given')} " \
           "#{best_player.votes_count} " \
@@ -52,7 +52,7 @@ module Helper
     end
 
     def users_list
-      list = users.order('id ASC').map { |user| member_name(user) }
+      list = users.order(id: :asc).map { |user| member_name(user) }
       list.each.with_index(1) { |user, i| user.prepend("#{i}.") }
     end
 
