@@ -6,17 +6,17 @@ class BotMessageDispatcher
   attr_reader :message, :user
 
   AVAILABLE_COMMANDS = [
-    BotCommand::Start,
-    BotCommand::Stop,
+    BotCommand::Help,
     BotCommand::Create,
+    BotCommand::Stop,
+    BotCommand::Start,
+    BotCommand::List,
     BotCommand::In,
     BotCommand::Out,
     BotCommand::Add,
     BotCommand::Delete,
-    BotCommand::List,
     BotCommand::Randomize,
     BotCommand::Teams,
-    BotCommand::Help,
     BotCommand::Vote,
     BotCommand::BestPlayer
   ].freeze
@@ -42,14 +42,15 @@ class BotMessageDispatcher
   def process
     return if @message['channel_post'] || @message['edited_channel_post']
     set_i18n if language
+    command = parse_command
     return BotCommand::Language.new(@user, @message).start if admin? && has_no_language?
-    return BotCommand::Unauthorized.new(@user, @message).start unless command_for_admin?(parse_command)
+    return BotCommand::Unauthorized.new(@user, @message).start unless command_for_admin?(command)
     if @message['edited_message']
       BotCommand::Base.new(@user, @message).repeat_command
     elsif @message['message']['text'].nil?
       BotCommand::Base.new(@user, @message).only_text
-    elsif parse_command
-      command_process(parse_command)
+    elsif command
+      command_process(command)
     elsif next_bot_command
       execute_next_command_method(next_bot_command)
     else
