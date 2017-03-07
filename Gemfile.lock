@@ -37,6 +37,7 @@ GEM
       faraday
       virtus
     thread_safe (0.3.5)
+    timezone (1.2.5)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     virtus (1.0.5)
@@ -56,6 +57,7 @@ DEPENDENCIES
   rack (~> 2.0)
   rake (~> 12.0)
   telegram-bot-ruby (~> 0.7)
+  timezone (~> 1.2)
 
 RUBY VERSION
    ruby 2.4.0p0
