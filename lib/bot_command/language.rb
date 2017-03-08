@@ -7,7 +7,7 @@ module BotCommand
 
     def start
       send_message(
-        'Выберите язык',
+        'Choose language',
         reply_markup: keyboard_buttons(language_list),
         reply_to_message_id: @message['message']['message_id']
       )
@@ -18,7 +18,7 @@ module BotCommand
       valid_lang?(text, user) do |lang|
         chat.update(language: AVAILABLE_LANGS.key(lang))
         I18n.locale = chat.language.to_sym
-        send_message(I18n.t('help_message'))
+        send_message(I18n.t('help_message'), reply_markup: { remove_keyboard: true }.to_json)
         user.reset_next_bot_command
       end
     end
