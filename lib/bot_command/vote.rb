@@ -34,7 +34,7 @@ module BotCommand
     end
 
     def vote(number)
-      candidate = event.users.order('id ASC')[number-1]
+      candidate = event.users.order(id: :asc)[number-1]
       return voting_restriction if candidate == user
       candidate_name = event.member_name(candidate)
       event.upvote(candidate, user)
