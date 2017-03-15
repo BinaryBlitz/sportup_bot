@@ -11,7 +11,7 @@ class AppConfigurator
 
   def setup_i18n
     I18n.load_path += Dir[File.join('config', 'locales', '**', '*.{yml}')]
-    I18n.default_locale = :ru
+    I18n.default_locale = :en
     I18n.backend.load_translations
   end
 
