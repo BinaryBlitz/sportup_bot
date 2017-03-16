@@ -6,9 +6,9 @@ module BotCommand
 
     def start
       if event.number_of_teams.nil?
-        send_message("#{I18n.t('no_teams')}")
+        send_message(I18n.t('no_teams'))
       else
-        send_message("#{event.teams_list}")
+        send_message(event.teams_list.to_s)
       end
       user.reset_next_bot_command
     end

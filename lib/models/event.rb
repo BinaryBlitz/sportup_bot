@@ -16,10 +16,9 @@ class Event < ActiveRecord::Base
   has_many :guests, dependent: :destroy
 
   def close
-    if close_time?
-      I18n.locale = lang if lang
-      BotCommand::Base.new.send_message( I18n.t('farewell_message'), chat_id: chat.chat_id)
-    end
+    return unless close_time?
+    I18n.locale = lang if lang
+    BotCommand::Base.new.send_message(I18n.t('farewell_message'), chat_id: chat.chat_id)
   end
 
   def members_count

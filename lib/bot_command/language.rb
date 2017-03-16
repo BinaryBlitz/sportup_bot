@@ -11,7 +11,7 @@ module BotCommand
         reply_markup: keyboard_buttons(language_list),
         reply_to_message_id: @message['message']['message_id']
       )
-      user.set_next_bot_command({ method: :set_lang, class: self.class.to_s })
+      user.next_bot_command(method: :set_lang, class: self.class.to_s)
     end
 
     def set_lang

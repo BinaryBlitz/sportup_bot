@@ -6,7 +6,7 @@ module Helper
       en: 'English',
       ru: 'Русский',
       de: 'Deutsch'
-    }
+    }.freeze
 
     def keyboard_buttons(button_list)
       Telegram::Bot::Types::ReplyKeyboardMarkup.new(

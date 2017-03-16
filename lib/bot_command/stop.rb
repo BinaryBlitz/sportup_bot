@@ -5,8 +5,8 @@ module BotCommand
     end
 
     def start
-      send_message("#{I18n.t('event_cancellation')}")
-      event.destroy if event
+      send_message(I18n.t('event_cancellation'))
+      event&.destroy
       user.reset_next_bot_command
     end
   end

@@ -2,11 +2,7 @@ module Helper
   module Teams
     def members_list
       list = members.map do |member|
-        if member.class == User
-          member_name(member)
-        else
-          guest_name(member)
-        end
+        member.class == User ? member_name(member) : guest_name(member)
       end
       list.each.with_index(1) { |member, i| member.prepend("#{i}.") }
       list.join("\n")
@@ -37,7 +33,7 @@ module Helper
       list = []
       start = 0
       1.upto(number) do |i|
-        last = (i <= extra_members) ? members_in_team.next : members_in_team
+        last = i <= extra_members ? members_in_team.next : members_in_team
         list << members.slice(start, last)
         start = list.flatten.size
       end
@@ -56,7 +52,7 @@ module Helper
             member.update(team_number: i)
           end
         end
-        team_list.each.with_index(1) { |member, i| member.prepend("#{i}.") }
+        team_list.each.with_index(1) { |member, team_number| member.prepend("#{team_number}.") }
         list << "#{I18n.t('team')} #{i}:\n#{team_list.join("\n")}"
       end
       list.join("\n\n")
@@ -66,9 +62,9 @@ module Helper
       team = []
       members.each do |member|
         if member.class == User
-          team << (member_name(member)) if team_number == membership(member).team_number
+          team << member_name(member) if team_number == membership(member).team_number
         else
-          team << (guest_name(member)) if team_number == member.team_number
+          team << guest_name(member) if team_number == member.team_number
         end
       end
       team.each.with_index(1) { |member, i| member.prepend("#{i}.") }
@@ -76,11 +72,15 @@ module Helper
     end
 
     def member_name(member)
-      member.username.present? ? "@#{member.name}" : "#{member.first_name}"
+      member.username.present? ? "@#{member.name}" : member.first_name.to_s
     end
 
     def guest_name(member)
-      member.user.username.present? ? "#{I18n.t('guest')} @#{member.user.name}" : "#{I18n.t('guest')} #{member.user.first_name}"
+      if member.user.username.present?
+        "#{I18n.t('guest')} @#{member.user.name}"
+      else
+        "#{I18n.t('guest')} #{member.user.first_name}"
+      end
     end
   end
 end

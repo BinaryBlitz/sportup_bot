@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
 
   validates :telegram_id, uniqueness: true
 
-  def set_next_bot_command(options = {})
+  def next_bot_command(options = {})
     bot_command_data[:method] = options[:method]
     bot_command_data[:class] = options[:class]
     bot_command_data[:event] = options[:event]

@@ -7,18 +7,18 @@ module BotCommand
   class Base
     attr_reader :user, :message, :api
 
-    def initialize(user={}, message={})
+    def initialize(user = {}, message = {})
       @user = user
       @message = message
       @api = Telegram::Bot::Api.new(Environment.token)
     end
 
     def should_start?
-      fail NotImplementedError, "Implementation of Base::should_start? method doesn't exist"
+      raise NotImplementedError, "Implementation of Base::should_start? method doesn't exist"
     end
 
     def start
-      fail NotImplementedError, "Implementation of Base::start method doesn't exist"
+      raise NotImplementedError, "Implementation of Base::start method doesn't exist"
     end
 
     def admin?
@@ -31,11 +31,11 @@ module BotCommand
     end
 
     def only_text
-      send_message_with_reply("#{I18n.t('empty_text')}") if @message['message']['reply_to_message']
+      send_message_with_reply(I18n.t('empty_text')) if @message['message']['reply_to_message']
     end
 
     def repeat_command
-      send_message("#{I18n.t('repeat_command')}")
+      send_message(I18n.t('repeat_command'))
     end
 
     def event
@@ -55,20 +55,20 @@ module BotCommand
     protected
 
     def send_message_with_reply(text)
-      @api.send_message({
+      @api.send_message(
         chat_id: chat_id,
         text: text,
         reply_to_message_id: @message['message']['message_id'],
         reply_markup: ::Telegram::Bot::Types::ForceReply.new(force_reply: true, selective: true)
-      })
+      )
     end
 
     def text
-      @message&.dig('message', 'text')
+      @message.dig('message', 'text')
     end
 
     def chat_id
-      @message&.dig('message', 'chat', 'id') || @message&.dig('edited_message', 'chat', 'id')
+      @message.dig('message', 'chat', 'id') || @message.dig('edited_message', 'chat', 'id')
     end
 
     def bot_name
@@ -76,11 +76,11 @@ module BotCommand
     end
 
     def username
-      @user.username.present? ? "@#{@user.name}" : "#{@user.first_name}"
+      @user.username.present? ? "@#{@user.name}" : @user.first_name.to_s
     end
 
     def private_chat?
-      @message&.dig('message', 'chat', 'type') == 'private'
+      @message.dig('message', 'chat', 'type') == 'private'
     end
 
     def command_without_params?(text, command)

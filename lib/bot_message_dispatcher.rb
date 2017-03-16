@@ -5,6 +5,7 @@ require './environment'
 class BotMessageDispatcher
   attr_reader :message, :user
 
+  SET_LANG_COMMAND = 'set_lang'.freeze
   AVAILABLE_COMMANDS = [
     BotCommand::Help,
     BotCommand::Create,
@@ -30,7 +31,8 @@ class BotMessageDispatcher
   ALLOWED_COMMANDS = [
     BotCommand::Start,
     BotCommand::Help,
-    BotCommand::Create
+    BotCommand::Create,
+    BotCommand::Stop
   ].freeze
 
   def initialize(message, user)
@@ -43,18 +45,18 @@ class BotMessageDispatcher
     return if @message['channel_post'] || @message['edited_channel_post']
     set_i18n if language
     command = parse_command
-    return BotCommand::Language.new(@user, @message).start if admin? && has_no_language?
-    return BotCommand::Unauthorized.new(@user, @message).start unless command_for_admin?(command)
+    return start_command('Language') if admin? && no_language?
+    return start_command('Unauthorized') unless command_for_admin?(command)
     if @message['edited_message']
-      BotCommand::Base.new(@user, @message).repeat_command
+      base_command.repeat_command
     elsif @message['message']['text'].nil?
-      BotCommand::Base.new(@user, @message).only_text
+      base_command.only_text
     elsif command
       command_process(command)
     elsif next_bot_command
       execute_next_command_method(next_bot_command)
     else
-      BotCommand::Undefined.new(@user, @message).start
+      start_command('Undefined')
     end && user.save
   end
 
@@ -77,14 +79,22 @@ class BotMessageDispatcher
     admin?
   end
 
-  def has_no_language?
-    language.nil? && next_bot_command != 'set_lang'
+  def no_language?
+    language.nil? && next_bot_command != SET_LANG_COMMAND
+  end
+
+  def start_command(command)
+    BotCommand::const_get(command).new(@user, @message).start
+  end
+
+  def base_command
+    BotCommand::Base.new(@user, @message)
   end
 
   def command_process(command)
     @botan.track(command.to_s.gsub('BotCommand::', ''), @user.telegram_id, message: @message['message'])
     command = command.new(@user, @message)
-    return command.send_message("#{I18n.t('no_events')}") unless event_exists?(command)
+    return command.send_message(I18n.t('no_events')) unless event_exists?(command)
     command.start
   end
 

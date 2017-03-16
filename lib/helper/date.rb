@@ -9,7 +9,7 @@ module Helper
       if ::Date.parse(format(date).to_s) >= ::Date.today
         true
       else
-        send_message_with_reply("#{I18n.t('past_date')}")
+        send_message_with_reply(I18n.t('past_date'))
         false
       end
     end
@@ -21,7 +21,7 @@ module Helper
       elsif !event.starts_at && date_time > Time.now
         true
       else
-        send_message_with_reply("#{I18n.t('past_time')}")
+        send_message_with_reply(I18n.t('past_time'))
         false
       end
     end
@@ -35,7 +35,7 @@ module Helper
     end
 
     def end_of_voting_time
-      date_with_time(ends_at) + SECONDS_IN_HOUR*HOURS_IN_DAY
+      date_with_time(ends_at) + SECONDS_IN_HOUR * HOURS_IN_DAY
     end
 
     def remained_time

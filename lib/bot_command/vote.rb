@@ -10,16 +10,16 @@ module BotCommand
     def start
       number = text.gsub(/\/vote\s+/, '').to_i
       if event&.membership(user)&.voted
-        send_message("#{I18n.t('voted_already')}")
+        send_message(I18n.t('voted_already'))
       elsif event.date_with_time(event.ends_at) > Time.now
-        send_message("#{I18n.t('not_finished')}")
+        send_message(I18n.t('not_finished'))
       elsif event.members.include?(user) && command_without_params?(text, '/vote')
-        send_message_with_reply("#{I18n.t('number')}")
-        user.set_next_bot_command({ method: :number, class: self.class.to_s })
+        send_message_with_reply(I18n.t('number'))
+        user.next_bot_command(method: :number, class: self.class.to_s)
       elsif event.members.include?(user)
         valid_vote?(number, event) { |number| vote(number) }
       else
-        send_message("#{I18n.t('not_member')}")
+        send_message(I18n.t('not_member'))
         user.reset_next_bot_command
       end
       event.close_vote
@@ -34,7 +34,7 @@ module BotCommand
     end
 
     def vote(number)
-      candidate = event.users.order(id: :asc)[number-1]
+      candidate = event.users.order(id: :asc)[number - 1]
       return voting_restriction if candidate == user
       candidate_name = event.member_name(candidate)
       event.upvote(candidate, user)
@@ -47,7 +47,7 @@ module BotCommand
     end
 
     def voting_restriction
-      send_message("#{I18n.t('self_voting')}")
+      send_message(I18n.t('self_voting'))
       user.reset_next_bot_command
     end
   end
