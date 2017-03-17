@@ -51,7 +51,7 @@ class BotMessageDispatcher
       base_command.repeat_command
     elsif @message['message']['text'].nil? && @message['message']['location'].nil?
       base_command.only_text
-    elsif command
+    elsif command && language
       command_process(command)
     elsif next_bot_command
       execute_next_command_method(next_bot_command)
