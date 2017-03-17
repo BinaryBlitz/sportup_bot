@@ -3,9 +3,9 @@ require 'telegram/bot'
 module Helper
   module Buttons
     AVAILABLE_LANGS = {
-      en: 'English',
-      ru: 'Русский',
-      de: 'Deutsch'
+      en: '🇬🇧 English',
+      ru: '🇷🇺 Русский',
+      de: '🇩🇪 Deutsch'
     }.freeze
 
     def keyboard_buttons(button_list)
