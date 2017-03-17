@@ -1,10 +1,12 @@
 require './database_connector'
+require 'timezone'
 require 'yaml'
 
 class AppConfigurator
   def configure
     setup_i18n
     setup_database
+    setup_timezone
   end
 
   private
@@ -17,6 +19,12 @@ class AppConfigurator
 
   def setup_database
     DatabaseConnector.establish_connection
-    DatabaseConnector.set_timezone
+  end
+
+  def setup_timezone
+    Timezone::Lookup.config(:geonames) do |c|
+      c.username = ENV["GEONAMES_NAME"]
+      c.offset_etc_zones = true
+    end
   end
 end

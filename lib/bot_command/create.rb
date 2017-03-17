@@ -1,8 +1,10 @@
 require './lib/models/event'
-require 'telegram/bot'
+require 'timezone'
+require 'geocoder'
 
 module BotCommand
   class Create < Base
+    include Helper::Buttons
     include Helper::Validators
 
     def should_start?
@@ -18,6 +20,11 @@ module BotCommand
       end
     end
 
+    def timezone
+      timezone = Timezone.lookup(*coordinates)
+      chat.update(timezone: timezone)
+    end
+
     def name
       valid_length? text do |name|
         event = Event.new(name: name, chat: chat)
@@ -27,7 +34,10 @@ module BotCommand
     end
 
     def address
-      valid_length? text do |address|
+      return send_message_with_reply(I18n.t('invalid_location')) unless location
+      timezone
+      address = Geocoder.address(coordinates, language: chat.language.to_sym)
+      valid_length? address do |address|
         event = user.bot_command_data['event'].update(address: address)
         send_message_with_reply(I18n.t('starting_date'))
         user.next_bot_command(method: :starting_date, class: self.class.to_s, event: event)
@@ -35,7 +45,7 @@ module BotCommand
     end
 
     def starting_date
-      valid_date? text do |date|
+      valid_date?(event, text) do |date|
         event = user.bot_command_data['event'].update(starting_date: date)
         send_message_with_reply(I18n.t('starts_at'))
         user.next_bot_command(method: :starts_at, class: self.class.to_s, event: event)

@@ -67,6 +67,14 @@ module BotCommand
       @message.dig('message', 'text')
     end
 
+    def location
+      @message.dig('message', 'location')
+    end
+
+    def coordinates
+      [location['latitude'], location['longitude']]
+    end
+
     def chat_id
       @message.dig('message', 'chat', 'id') || @message.dig('edited_message', 'chat', 'id')
     end

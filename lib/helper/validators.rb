@@ -9,13 +9,16 @@ module Helper
     MAX_NUMBER_OF_MEMBERS = 1000
     MIN_NUMBER_OF_MEMBERS = 1
 
-    def valid_date?(date)
-      yield(date) if valid_date_format? && present_date?(date) && block_given?
+    def valid_date?(event, date)
+      yield(date) if valid_date_format? && present_date?(new_event, date) && block_given?
     end
 
     def valid_time?(event, time)
-      event = Event.new(user.bot_command_data['event'])
-      yield(time) if valid_time_format?(time) && present_time?(event, time) && block_given?
+      yield(time) if valid_time_format?(time) && present_time?(new_event, time) && block_given?
+    end
+
+    def new_event
+      Event.new(user.bot_command_data['event'])
     end
 
     def valid_date_format?

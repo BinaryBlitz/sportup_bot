@@ -3,6 +3,7 @@ require './lib/helper'
 require './lib/bot_command/base'
 
 class Event < ActiveRecord::Base
+  include Helper::Timezone
   include Helper::Date
   include Helper::Teams
   include Helper::Vote
@@ -31,7 +32,8 @@ class Event < ActiveRecord::Base
 
   def date_with_time(time)
     time = I18n.l(time, format: :short)
-    add_time_to_date(starting_date, time)
+    date = add_time_to_date(starting_date, time)
+    local_to_utc(date)
   end
 
   def membership(user)
@@ -39,16 +41,20 @@ class Event < ActiveRecord::Base
   end
 
   def started?
-    date_with_time(starts_at) <= Time.now
+    date_with_time(starts_at) <= current_time_in_timezone
   end
 
   def lang
     chat.language.to_sym if chat&.language
   end
 
+  def timezone
+    Timezone.fetch(chat.timezone, Timezone['Europe/Moscow'])
+  end
+
   private
 
   def close_time?
-    ((Time.now - date_with_time(starts_at)).to_i / 60).between?(0, 10)
+    ((current_time_in_timezone - date_with_time(starts_at)).to_i / 60).between?(0, 10)
   end
 end

@@ -2,7 +2,7 @@ module Helper
   module Vote
     def begin_vote
       I18n.locale = lang if lang
-      begin_vote_message if ((Time.now - date_with_time(ends_at)).to_i / 60).between?(0, 10)
+      begin_vote_message if ((current_time_in_timezone - date_with_time(ends_at)).to_i / 60).between?(0, 10)
     end
 
     def close_vote

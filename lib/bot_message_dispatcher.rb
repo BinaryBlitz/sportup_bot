@@ -49,7 +49,7 @@ class BotMessageDispatcher
     return start_command('Unauthorized') unless command_for_admin?(command)
     if @message['edited_message']
       base_command.repeat_command
-    elsif @message['message']['text'].nil?
+    elsif @message['message']['text'].nil? && @message['message']['location'].nil?
       base_command.only_text
     elsif command
       command_process(command)
