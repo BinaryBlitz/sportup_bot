@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 ruby '2.4.0'
 
 gem 'activerecord', '~> 5.0'
+gem 'geocoder', '~> 1.3'
 gem 'i18n', '~> 0.8'
 gem 'timezone', '~> 1.2'
 gem 'pg', '~> 0.20'
