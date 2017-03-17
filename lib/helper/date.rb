@@ -5,8 +5,8 @@ module Helper
     SECONDS_IN_HOUR = 3600
     HOURS_IN_DAY = 24
 
-    def present_date?(date)
-      if ::Date.parse(format(date).to_s) >= ::Date.today
+    def present_date?(event, date)
+      if ::Date.parse(format(date).to_s) >= event.current_date_in_timezone
         true
       else
         send_message_with_reply(I18n.t('past_date'))
@@ -16,9 +16,9 @@ module Helper
 
     def present_time?(event, time)
       date_time = add_time_to_date(event.starting_date, time)
-      if event.starts_at && date_time > event.date_with_time(event.starts_at)
+      if event.starts_at && event.local_to_utc(date_time) > event.date_with_time(event.starts_at)
         true
-      elsif !event.starts_at && date_time > Time.now
+      elsif !event.starts_at && event.local_to_utc(date_time) > event.current_time_in_timezone
         true
       else
         send_message_with_reply(I18n.t('past_time'))
@@ -39,7 +39,7 @@ module Helper
     end
 
     def remained_time
-      (end_of_voting_time - Time.now).to_i / MINUTES_IN_HOUR
+      (end_of_voting_time - current_time_in_timezone).to_i / MINUTES_IN_HOUR
     end
 
     def format(date)
