@@ -7,6 +7,10 @@ class User < ActiveRecord::Base
 
   validates :telegram_id, uniqueness: true
 
+  def self.find_by_name(name)
+    find_by_first_name(name) || find_by_username(name)
+  end
+
   def next_bot_command(options = {})
     bot_command_data[:method] = options[:method]
     bot_command_data[:class] = options[:class]
