@@ -1,6 +1,6 @@
 module BotCommand
   class Vote < Base
-    include Helper::Validators
+    include Helper::Buttons
 
     def should_start?
       return false if text.nil?
@@ -35,8 +35,16 @@ module BotCommand
         "#{I18n.t('preposition', default: '')}#{candidate_name} #{I18n.t('has', default: '')} " \
         "#{event.membership(candidate).votes_count}/#{event.users.count} #{I18n.t('votes')}."
       )
+      edit_vote_message
       user.reset_next_bot_command
       event.close_vote
+    end
+
+    def edit_vote_message
+      edit_message_text(
+        event&.begin_vote_text,
+        inline_buttons(candidates_list(event.users.order(id: :asc).map(&:name)))
+      )
     end
 
     def voting_restriction

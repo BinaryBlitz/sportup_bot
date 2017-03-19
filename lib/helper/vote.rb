@@ -60,11 +60,15 @@ module Helper
     def begin_vote_message
       candidates = users.order(id: :asc).map(&:name)
       BotCommand::Base.new.send_message(
-        "#{I18n.t('best_player')}: \n" \
-        "#{users_list.join("\n")} \n\n#{I18n.t('vote_note')}",
+        begin_vote_text,
         chat_id: chat.chat_id,
         reply_markup: inline_buttons(candidates_list(candidates))
       )
+    end
+
+    def begin_vote_text
+      "#{I18n.t('best_player')}: \n" \
+      "#{users_list.join("\n")} \n\n#{I18n.t('vote_note')}"
     end
 
     def best_player_info

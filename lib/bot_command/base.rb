@@ -63,6 +63,15 @@ module BotCommand
       )
     end
 
+    def edit_message_text(text, reply_markup)
+      @api.editMessageText(
+        chat_id: chat_id,
+        message_id: @message.dig('callback_query', 'message', 'message_id'),
+        text: text,
+        reply_markup: reply_markup
+      )
+    end
+
     def text
       @message.dig('message', 'text')
     end

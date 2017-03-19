@@ -2,7 +2,6 @@ require 'telegram/bot'
 
 module Helper
   module Buttons
-
     AVAILABLE_LANGS = {
       en: '🇬🇧 English',
       ru: '🇷🇺 Русский',
@@ -32,6 +31,10 @@ module Helper
       candidates.map do |candidate|
         [] << { text: candidate + " - #{votes_count(User.find_by_name(candidate))}", callback_data: candidate }
       end
+    end
+
+    def votes_count(user)
+      event.membership(user).votes_count
     end
   end
 end
