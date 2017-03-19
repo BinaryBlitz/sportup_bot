@@ -67,6 +67,10 @@ module BotCommand
       @message.dig('message', 'text')
     end
 
+    def text_from_button
+      @message.dig('callback_query', 'data')
+    end
+
     def location
       @message.dig('message', 'location')
     end
@@ -76,7 +80,15 @@ module BotCommand
     end
 
     def chat_id
+      message_chat_id || callback_query_chat_id
+    end
+
+    def message_chat_id
       @message.dig('message', 'chat', 'id') || @message.dig('edited_message', 'chat', 'id')
+    end
+
+    def callback_query_chat_id
+      @message.dig('callback_query', 'message', 'chat', 'id')
     end
 
     def bot_name

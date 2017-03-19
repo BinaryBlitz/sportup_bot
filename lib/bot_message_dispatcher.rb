@@ -49,7 +49,9 @@ class BotMessageDispatcher
     return start_command('Unauthorized') unless command_for_admin?(command)
     if @message['edited_message']
       base_command.repeat_command
-    elsif @message['message']['text'].nil? && @message['message']['location'].nil?
+    elsif @message['callback_query']
+      BotCommand::Vote.new(@user, @message).vote
+    elsif incorrect_message?
       base_command.only_text
     elsif command && language
       command_process(command)
@@ -81,6 +83,10 @@ class BotMessageDispatcher
 
   def no_language?
     language.nil? && next_bot_command != SET_LANG_COMMAND
+  end
+
+  def incorrect_message?
+    @message.dig('message', 'text').nil? && @message.dig('message', 'location').nil? && @message['callback_query'].nil?
   end
 
   def start_command(command)
