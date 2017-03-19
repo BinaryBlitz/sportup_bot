@@ -8,33 +8,25 @@ module BotCommand
     end
 
     def start
-      number = text.gsub(/\/vote\s+/, '').to_i
+      event&.begin_vote_message
+    end
+
+    def vote
       if event&.membership(user)&.voted
         send_message(I18n.t('voted_already'))
       elsif event.date_with_time(event.ends_at) > Time.now
         send_message(I18n.t('not_finished'))
-      elsif event.members.include?(user) && command_without_params?(text, '/vote')
-        send_message_with_reply(I18n.t('number'))
-        user.next_bot_command(method: :number, class: self.class.to_s)
       elsif event.members.include?(user)
-        valid_vote?(number, event) { |number| vote(number) }
+        vote_info
       else
         send_message(I18n.t('not_member'))
         user.reset_next_bot_command
       end
-      event.close_vote
     end
 
-    def number
-      valid_vote?(text, event) do |number|
-        vote(number.to_i)
-        user.reset_next_bot_command
-      end
-      event.close_vote
-    end
 
-    def vote(number)
-      candidate = event.users.order(id: :asc)[number - 1]
+    def vote_info
+      candidate = User.find_by_name(text_from_button)
       return voting_restriction if candidate == user
       candidate_name = event.member_name(candidate)
       event.upvote(candidate, user)
@@ -44,6 +36,7 @@ module BotCommand
         "#{event.membership(candidate).votes_count}/#{event.users.count} #{I18n.t('votes')}."
       )
       user.reset_next_bot_command
+      event.close_vote
     end
 
     def voting_restriction

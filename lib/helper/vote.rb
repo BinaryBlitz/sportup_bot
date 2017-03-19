@@ -1,13 +1,20 @@
+require './lib/models/user'
+
 module Helper
   module Vote
+    include Buttons
+
     def begin_vote
       I18n.locale = lang if lang
       begin_vote_message if ((current_time_in_timezone - date_with_time(ends_at)).to_i / 60).between?(0, 10)
     end
 
+    def best_player
+      memberships.order(votes_count: :desc).first
+    end
+
     def close_vote
       I18n.locale = lang if lang
-      best_player = memberships.order('votes_count DESC').first
       return close_event_with_no_members if remained_time <= 0 && best_player.nil?
       if best_player && best_player.votes_count > users.count / 2
         best_player_info
@@ -32,14 +39,17 @@ module Helper
       users_list = users.includes(:memberships).order('memberships.votes_count DESC')
       list = users_list.map { |user| member_name(user) }
       list.each_with_index do |user, i|
-        user << " #{membership(users_list[i]).votes_count} #{I18n.t('votes')}"
+        user << " #{votes_count(users_list[i])} #{I18n.t('votes')}"
       end
       list.join("\n")
     end
 
     def users_list
       list = users.order(id: :asc).map { |user| member_name(user) }
-      list.each.with_index(1) { |user, i| user.prepend("#{i}.") }
+      list.each.with_index(1) do |user, i|
+        user << percent_of_votes(User.find_by_name(user))
+        user.prepend("#{i}.")
+      end
     end
 
     def upvote(candidate, user)
@@ -48,10 +58,12 @@ module Helper
     end
 
     def begin_vote_message
+      candidates = users.order(id: :asc).map(&:name)
       BotCommand::Base.new.send_message(
         "#{I18n.t('best_player')}: \n" \
         "#{users_list.join("\n")} \n\n#{I18n.t('vote_note')}",
-        chat_id: chat.chat_id
+        chat_id: chat.chat_id,
+        reply_markup: inline_buttons(candidates_list(candidates))
       )
     end
 
@@ -69,6 +81,15 @@ module Helper
         "#{I18n.t('vote_ending')} #{member_name(best_player.user)}",
         chat_id: chat.chat_id
       )
+    end
+
+    def percent_of_votes(user)
+      percent = (votes_count(user) / users.count.to_f * 100).to_i
+      " - #{percent}%\n" + "👍" * votes_count(user)
+    end
+
+    def votes_count(user)
+      membership(user).votes_count
     end
   end
 end
