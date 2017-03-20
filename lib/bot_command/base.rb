@@ -94,5 +94,9 @@ module BotCommand
     def command_without_params?(text, command)
       text.split(command).empty? || text.split("#{command}@#{bot_name}").empty?
     end
+
+    def command_with_params(text, command)
+      text&.starts_with?("#{command} ") || text&.starts_with?("#{command}@#{bot_name} ")
+    end
   end
 end
