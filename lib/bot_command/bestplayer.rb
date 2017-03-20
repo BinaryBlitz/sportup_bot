@@ -17,7 +17,7 @@ module BotCommand
       send_message(
         "#{I18n.t('best_player')}: \n" \
         "#{event.users_list.join("\n")} \n\n#{I18n.t('vote_note')}" \
-        "#{I18n.t('distribution_of_votes')}: \n#{event.vote_list} \n\n" \
+        "#{I18n.t('distribution_of_votes')} \n#{event.vote_list} \n\n" \
         "#{I18n.t('end_of_voting_left')} #{event.remained_time / 60} " \
         "#{I18n.t('hours')} #{event.remained_time % 60} #{I18n.t('minutes')}"
       )

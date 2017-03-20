@@ -63,8 +63,21 @@ module BotCommand
       )
     end
 
+    def edit_message_text(text, reply_markup)
+      @api.editMessageText(
+        chat_id: chat_id,
+        message_id: @message.dig('callback_query', 'message', 'message_id'),
+        text: text,
+        reply_markup: reply_markup
+      )
+    end
+
     def text
       @message.dig('message', 'text')
+    end
+
+    def text_from_button
+      @message.dig('callback_query', 'data')
     end
 
     def location
@@ -76,7 +89,15 @@ module BotCommand
     end
 
     def chat_id
+      message_chat_id || callback_query_chat_id
+    end
+
+    def message_chat_id
       @message.dig('message', 'chat', 'id') || @message.dig('edited_message', 'chat', 'id')
+    end
+
+    def callback_query_chat_id
+      @message.dig('callback_query', 'message', 'chat', 'id')
     end
 
     def bot_name
