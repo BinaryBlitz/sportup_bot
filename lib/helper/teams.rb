@@ -76,11 +76,12 @@ module Helper
     end
 
     def guest_name(member)
-      if member.user.username.present?
+      name = if member.user.username.present?
         "#{I18n.t('guest')} @#{member.user.name}"
       else
         "#{I18n.t('guest')} #{member.user.first_name}"
       end
+      member.name ? name.prepend("#{member.name}, ") : name
     end
   end
 end
