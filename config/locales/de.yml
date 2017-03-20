@@ -45,6 +45,10 @@ de:
   invalid_lang: 'wähle deine Sprache aus'
   invalid_location: 'Suche auf der Karte den Standort aus (📎 — Location — Send location)'
   voted_already: 'du hast schon abgestimmt '
+  voted: 'Es wurde '
+  voting_users: 'Stimmen abgegeben.'
+  best_player_count: 'Hat schon'
+  times: 'mal die Abstimmung gewonnen'
   not_finished: 'das Spiel wurde noch nicht beendet'
   self_voting: 'du darfst nicht für dich selbst abstimmen'
   participants: 'Spieler'
@@ -68,10 +72,9 @@ de:
   vote_ending: 'die Abstimmung ist zur Ende. Der Gewinner ist'
   clear_advantage: 'führt mit deutlichem Abstand'
   already_given: 'wurde vergeben'
-  distribution_of_votes: 'Übersicht der vergebenen Stimmen'
+  distribution_of_votes: 'Übersicht der vergebenen Stimmen:'
   end_of_voting_left: 'Die Abstimmung noch abwarten'
-  vote_note: "wähle /vote X, wobei das X steht für die Spielernummer. \n
-              die Abstimmung  wird beendet wenn alle ihre Stimme abgegeben haben. Oder nach Ablauf von 24 Stunden. \n\n"
+  vote_note: "die Abstimmung wird beendet wenn alle ihre Stimme abgegeben haben. Oder nach Ablauf von 24 Stunden. \n\n"
   started_event: 'das Spiel ist bereits gestartet'
   number: 'gib die Spielernummer ein'
   name: 'wie heißt das Spiel?'

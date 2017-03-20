@@ -45,6 +45,10 @@ en:
   not_admin: 'Sorry, you are not an administrator of the group.'
   not_member: 'Only last game participants can take part in vote.'
   voted_already: 'You have already voted.'
+  voted: 'Voted'
+  voting_users: 'players.'
+  best_player_count: 'He was chosen as best player'
+  times: 'times.'
   not_finished: 'Game has not finished yet.'
   participants: 'participants'
   goes: 'Goes'
@@ -67,11 +71,10 @@ en:
   vote_ending: 'Vote has ended, won'
   clear_advantage: 'wins with a clear advantage!'
   already_given: 'already got'
-  distribution_of_votes: 'Vote results at the moment'
+  distribution_of_votes: 'Vote results at the moment:'
   end_of_voting_left: 'Until the end of voting left'
   self_voting: 'You can not vote for yourself.'
-  vote_note: "Use /vote N, where N –serial number of candidate. \n
-             Vote will end when all voters choose their candidates or after 24 hours pass. \n\n"
+  vote_note: "Vote will end when all voters choose their candidates or after 24 hours pass. \n\n"
   started_event: 'Game already started'
   number: 'Enter serial number of candidate.'
   name: 'What Is game name?'

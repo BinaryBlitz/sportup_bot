@@ -84,9 +84,14 @@ module Helper
       )
     end
 
+    def number_of_best_player_award
+      memberships.where(user_id: best_player.user.id).count
+    end
+
     def vote_ending_info
       BotCommand::Base.new.send_message(
-        "#{I18n.t('vote_ending')} #{member_name(best_player.user)}",
+        "#{I18n.t('vote_ending')} #{member_name(best_player.user)}" \
+        "🏆 #{I18n.t('best_player_count')} #{number_of_best_player_award} #{I18n.t('times')} 🏆",
         chat_id: chat.chat_id
       )
     end

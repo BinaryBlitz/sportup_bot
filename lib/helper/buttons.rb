@@ -23,13 +23,18 @@ module Helper
 
     def language_list
       AVAILABLE_LANGS.values.map do |lang|
-        [] << { text: lang }
+        [{ text: lang }]
       end
     end
 
     def candidates_list(candidates)
       candidates.map do |candidate|
-        [] << { text: candidate + " - #{votes_count(User.find_by_name(candidate))}", callback_data: candidate }
+        [
+          {
+            text: candidate + " - #{votes_count(User.find_by_name(candidate))}",
+            callback_data: candidate
+          }
+        ]
       end
     end
 
