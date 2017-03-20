@@ -4,7 +4,7 @@ module BotCommand
 
     def should_start?
       return false if text.nil?
-      text.start_with?('/vote') || text.start_with?("/vote@#{bot_name}")
+      text == '/vote' || text == "/vote@#{bot_name}"
     end
 
     def start
@@ -24,32 +24,28 @@ module BotCommand
       end
     end
 
-
     def vote_info
       candidate = User.find_by_name(text_from_button)
       return voting_restriction if candidate == user
-      candidate_name = event.member_name(candidate)
       event.upvote(candidate, user)
-      send_message(
-        "#{event.member_name(user)} #{I18n.t('voted_for')} #{candidate_name}. " \
-        "#{I18n.t('preposition', default: '')}#{candidate_name} #{I18n.t('has', default: '')} " \
-        "#{event.membership(candidate).votes_count}/#{event.users.count} #{I18n.t('votes')}."
-      )
       edit_vote_message
-      user.reset_next_bot_command
       event.close_vote
     end
 
     def edit_vote_message
       edit_message_text(
         event&.begin_vote_text,
-        inline_buttons(candidates_list(event.users.order(id: :asc).map(&:name)))
+        inline_buttons(candidates_list(users_names))
       )
     end
 
     def voting_restriction
       send_message(I18n.t('self_voting'))
       user.reset_next_bot_command
+    end
+
+    def users_names
+      event.users.order(id: :asc).map(&:name)
     end
   end
 end

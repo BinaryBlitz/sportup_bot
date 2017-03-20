@@ -68,7 +68,11 @@ module Helper
 
     def begin_vote_text
       "#{I18n.t('best_player')}: \n" \
-      "#{users_list.join("\n")} \n\n#{I18n.t('vote_note')}"
+      "#{users_list.join("\n")} \n\n" \
+      "#{I18n.t('voted')} " \
+      "#{memberships.voted.count}/#{users.count} " \
+      "#{I18n.t('voting_users')}\n\n" \
+      "#{I18n.t('vote_note')}"
     end
 
     def best_player_info
