@@ -30,7 +30,7 @@ module BotCommand
 
     def add_anonymous_guest
       Guest.create(user: user, event: event)
-      info_message
+      info_message(nil)
     end
 
     def add_guest_with_name

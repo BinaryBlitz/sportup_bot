@@ -30,7 +30,7 @@ module BotCommand
 
     def delete_anonymous_guest
       user.guests.where(event: event).last.delete
-      info_message
+      info_message(nil)
     end
 
     def delete_guest_with_name
