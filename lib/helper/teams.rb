@@ -72,12 +72,12 @@ module Helper
     end
 
     def member_name(member)
-      member.username.present? ? "@#{member.name}" : member.first_name.to_s
+      member.username.present? ? "@#{member.username}" : member.first_name.to_s
     end
 
     def guest_name(member)
       name = if member.user.username.present?
-        "#{I18n.t('guest')} @#{member.user.name}"
+        "#{I18n.t('guest')} @#{member.user.username}"
       else
         "#{I18n.t('guest')} #{member.user.first_name}"
       end
