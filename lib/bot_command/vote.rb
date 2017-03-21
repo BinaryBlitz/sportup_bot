@@ -20,8 +20,8 @@ module BotCommand
         vote_info
       else
         send_message(I18n.t('not_member'))
-        user.reset_next_bot_command
       end
+      user.reset_next_bot_command
     end
 
     def vote_info

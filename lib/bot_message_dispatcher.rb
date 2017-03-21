@@ -82,6 +82,7 @@ class BotMessageDispatcher
   end
 
   def no_language?
+    return false if @message['callback_query']
     language.nil? && next_bot_command != SET_LANG_COMMAND
   end
 
