@@ -13,13 +13,13 @@ module BotCommand
 
     def vote
       if event&.membership(user)&.voted
-        send_message(I18n.t('voted_already'))
+        answer_callback_query(I18n.t('voted_already'))
       elsif event.date_with_time(event.ends_at) > Time.now
-        send_message(I18n.t('not_finished'))
+        answer_callback_query(I18n.t('not_finished'))
       elsif event.members.include?(user)
         vote_info
       else
-        send_message(I18n.t('not_member'))
+        answer_callback_query(I18n.t('not_member'))
       end
       user.reset_next_bot_command
     end
@@ -40,7 +40,7 @@ module BotCommand
     end
 
     def voting_restriction
-      send_message(I18n.t('self_voting'))
+      answer_callback_query(I18n.t('self_voting'))
       user.reset_next_bot_command
     end
 

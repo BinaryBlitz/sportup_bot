@@ -72,6 +72,13 @@ module BotCommand
       )
     end
 
+    def answer_callback_query(text)
+      @api.answerCallbackQuery(
+        text: text,
+        callback_query_id: callback_query_id
+      )
+    end
+
     def text
       @message.dig('message', 'text')
     end
@@ -98,6 +105,10 @@ module BotCommand
 
     def callback_query_chat_id
       @message.dig('callback_query', 'message', 'chat', 'id')
+    end
+
+    def callback_query_id
+      @message.dig('callback_query', 'id')
     end
 
     def bot_name
