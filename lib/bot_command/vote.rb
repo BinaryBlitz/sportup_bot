@@ -8,7 +8,11 @@ module BotCommand
     end
 
     def start
-      event&.begin_vote_message
+      if event.date_with_time(event.ends_at) > Time.now
+        answer_callback_query(I18n.t('not_finished'))
+      else
+        event&.begin_vote_message
+      end
     end
 
     def vote
