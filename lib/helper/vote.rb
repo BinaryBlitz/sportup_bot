@@ -13,6 +13,10 @@ module Helper
       memberships.order(votes_count: :desc).first
     end
 
+    def best_player_id
+      best_player&.user&.id
+    end
+
     def close_vote
       I18n.locale = lang if lang
       return close_event_with_no_members if remained_time <= 0 && best_player.nil?
@@ -85,13 +89,13 @@ module Helper
     end
 
     def number_of_best_player_award
-      memberships.where(user_id: best_player.user.id).count
+      Event.unscoped.map(&:best_player_id).compact.group_by(&:itself)[best_player_id].count
     end
 
     def vote_ending_info
       BotCommand::Base.new.send_message(
-        "#{I18n.t('vote_ending')} #{member_name(best_player.user)}" \
-        "🏆 #{I18n.t('best_player_count')} #{number_of_best_player_award} #{I18n.t('times')} 🏆",
+        "🏆 #{I18n.t('vote_ending')} #{member_name(best_player.user)} " \
+        "#{I18n.t('best_player_count')} #{number_of_best_player_award} #{I18n.t('times')} 🏆",
         chat_id: chat.chat_id
       )
     end
