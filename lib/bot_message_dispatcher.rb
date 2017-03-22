@@ -114,7 +114,7 @@ class BotMessageDispatcher
   end
 
   def chat_id
-    @message&.dig('message', 'chat', 'id') || @message&.dig('edited_message', 'chat', 'id')
+    base_command.chat_id
   end
 
   def set_i18n

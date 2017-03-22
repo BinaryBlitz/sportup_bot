@@ -52,6 +52,10 @@ module BotCommand
       return
     end
 
+    def chat_id
+      message_chat_id || callback_query_chat_id
+    end
+
     protected
 
     def send_message_with_reply(text)
@@ -93,10 +97,6 @@ module BotCommand
 
     def coordinates
       [location['latitude'], location['longitude']]
-    end
-
-    def chat_id
-      message_chat_id || callback_query_chat_id
     end
 
     def message_chat_id
