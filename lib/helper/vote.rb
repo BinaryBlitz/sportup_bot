@@ -94,8 +94,8 @@ module Helper
 
     def vote_ending_info
       BotCommand::Base.new.send_message(
-        "🏆 #{I18n.t('vote_ending')} #{member_name(best_player.user)} " \
-        "#{I18n.t('best_player_count')} #{number_of_best_player_award} #{I18n.t('times')} 🏆",
+        "🏆 #{I18n.t('vote_ending', best_player: member_name(best_player.user))} " \
+        "#{I18n.t('best_player_count', number_of_best_player_award: number_of_best_player_award)} 🏆",
         chat_id: chat.chat_id
       )
     end
