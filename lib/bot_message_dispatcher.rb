@@ -19,7 +19,8 @@ class BotMessageDispatcher
     BotCommand::Randomize,
     BotCommand::Teams,
     BotCommand::Vote,
-    BotCommand::BestPlayer
+    BotCommand::BestPlayer,
+    BotCommand::Language
   ].freeze
 
   ADMIN_COMMANDS = [
@@ -28,11 +29,12 @@ class BotMessageDispatcher
     BotCommand::Randomize
   ].freeze
 
-  ALLOWED_COMMANDS = [
+  EVENT_FREE_COMMANDS = [
     BotCommand::Start,
     BotCommand::Help,
     BotCommand::Create,
-    BotCommand::Stop
+    BotCommand::Stop,
+    BotCommand::Language
   ].freeze
 
   def initialize(message, user)
@@ -69,7 +71,7 @@ class BotMessageDispatcher
   end
 
   def event_exists?(command)
-    command.event || ALLOWED_COMMANDS.include?(command.class)
+    command.event || EVENT_FREE_COMMANDS.include?(command.class)
   end
 
   def admin?

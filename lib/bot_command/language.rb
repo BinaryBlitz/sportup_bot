@@ -5,6 +5,10 @@ module BotCommand
     include Helper::Buttons
     include Helper::Validators
 
+    def should_start?
+      text == '/language' || text == "/language@#{bot_name}"
+    end
+
     def start
       send_message(
         'Choose language',
