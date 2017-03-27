@@ -49,7 +49,7 @@ module Helper
     end
 
     def users_list
-      return '' if users.empty?
+      return [] if users.empty?
       list = users.order(id: :asc).map { |user| member_name(user) }
       list.each.with_index(1) do |user, i|
         user << percent_of_votes(User.find_by_name(user))
