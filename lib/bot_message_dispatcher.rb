@@ -1,5 +1,5 @@
 require_relative 'bot_command'
-require 'telegram/bot/botan'
+require 'staccato'
 require './environment'
 
 class BotMessageDispatcher
@@ -19,7 +19,6 @@ class BotMessageDispatcher
     BotCommand::Randomize,
     BotCommand::Teams,
     BotCommand::Vote,
-    BotCommand::BestPlayer,
     BotCommand::Language
   ].freeze
 
@@ -40,7 +39,7 @@ class BotMessageDispatcher
   def initialize(message, user)
     @message = message
     @user = user
-    @botan = Telegram::Bot::Botan::Api.new(Environment.botan_token)
+    @tracker = Staccato.tracker(Environment.tracker_id)
   end
 
   def process
@@ -105,7 +104,8 @@ class BotMessageDispatcher
   end
 
   def command_process(command)
-    @botan.track(command.to_s.gsub('BotCommand::', ''), @user.telegram_id, message: @message['message'])
+    @tracker.pageview(path: command.to_s.gsub('BotCommand::', ''), user_id: @user.id)
+    @tracker.event(category: @message['message']['chat']['type'], action: base_command.event, user_id: @user.id)
     command = command.new(@user, @message)
     return command.send_message(I18n.t('no_events')) unless event_exists?(command)
     command.start

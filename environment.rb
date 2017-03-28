@@ -3,7 +3,7 @@ module Environment
     ENV['BOT_TOKEN']
   end
 
-  def botan_token
-    ENV['BOTAN_TOKEN']
+  def tracker_id
+    ENV['TRACKER_ID']
   end
 end
