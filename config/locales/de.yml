@@ -12,7 +12,6 @@ de:
     /randomize — Spieler in Teams aufteilen
     /teams — Teams anzeigen
     /vote — Abstimmung über besten Spieler starten.
-    /bestplayer — Ergebnisse der Abstimmung anzeigen.
   info_message: |
     Spieleranzahl wurde erreicht. Bist du sicher dabei?:
     /in — auf jeden Fall

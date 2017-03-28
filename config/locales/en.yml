@@ -12,7 +12,6 @@ en:
     /randomize — Divide participants into teams
     /teams — View teams lists
     /vote — Vote for the best player of the game
-    /bestplayer — View votes results
   info_message: |
     Confirm your participation in a game:
     /in — If you are going to participate
