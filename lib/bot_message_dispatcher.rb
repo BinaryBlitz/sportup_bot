@@ -1,4 +1,5 @@
 require_relative 'bot_command'
+require 'geocoder'
 require 'staccato'
 require './environment'
 
@@ -39,14 +40,13 @@ class BotMessageDispatcher
   def initialize(message, user)
     @message = message
     @user = user
-    @tracker = Staccato.tracker(Environment.tracker_id)
+    @tracker = Staccato.tracker(Environment.tracker_id, user.id)
   end
 
   def process
-    return if @message['channel_post'] || @message['edited_channel_post']
     set_i18n if language
     command = parse_command
-    return start_command('Language') if admin? && no_language?
+    return start_command('Language') if base_command.admin? && no_language?
     return start_command('Unauthorized') unless command_for_admin?(command)
     if @message['edited_message']
       base_command.repeat_command
@@ -54,13 +54,13 @@ class BotMessageDispatcher
      vote_command.vote
     elsif incorrect_message?
       base_command.only_text
-    elsif command && language
-      command_process(command)
-    elsif next_bot_command
-      execute_next_command_method(next_bot_command)
+    elsif @message['message']
+      message_process(command)
     else
       start_command('Undefined')
     end && user.save
+  rescue
+    return
   end
 
   protected
@@ -73,13 +73,9 @@ class BotMessageDispatcher
     command.event || EVENT_FREE_COMMANDS.include?(command.class)
   end
 
-  def admin?
-    BotCommand::Base.new(@user, @message).admin?
-  end
-
   def command_for_admin?(command)
     return true unless ADMIN_COMMANDS.include?(command)
-    admin?
+    base_command.admin?
   end
 
   def no_language?
@@ -104,19 +100,35 @@ class BotMessageDispatcher
   end
 
   def command_process(command)
-    @tracker.pageview(path: command.to_s.gsub('BotCommand::', ''), user_id: @user.id)
-    @tracker.event(category: @message['message']['chat']['type'], action: base_command.event, user_id: @user.id)
-    command = command.new(@user, @message)
-    return command.send_message(I18n.t('no_events')) unless event_exists?(command)
-    command.start
+    command_class = command.new(@user, @message)
+    return command_class.send_message(I18n.t('no_events')) unless event_exists?(command_class)
+    track(command, command_class)
+    command_class.start
+  end
+
+  def message_process(command)
+    if command && language
+      command_process(command)
+    elsif next_bot_command
+      execute_next_command_method(next_bot_command)
+    end
+  end
+
+  def track(command, command_class)
+    @tracker.pageview(
+      path: command.to_s.gsub('BotCommand::', ''),
+      geographical_id: country_code(command_class)
+    )
+    @tracker.event(category: @message['message']['chat']['type'], action: base_command.event)
+  end
+
+  def country_code(command)
+    data = Geocoder.search(command.event&.address)[0]
+    data.data['address_components'][5]['short_name'] if command.event && data.present?
   end
 
   def language
-    Chat.find_or_create_by(chat_id: chat_id).language
-  end
-
-  def chat_id
-    base_command.chat_id
+    Chat.find_or_create_by(chat_id: base_command.chat_id).language
   end
 
   def set_i18n
