@@ -26,7 +26,8 @@ class BotMessageDispatcher
   ADMIN_COMMANDS = [
     BotCommand::Create,
     BotCommand::Stop,
-    BotCommand::Randomize
+    BotCommand::Randomize,
+    BotCommand::Language
   ].freeze
 
   EVENT_FREE_COMMANDS = [
