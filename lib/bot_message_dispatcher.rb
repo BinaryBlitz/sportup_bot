@@ -41,7 +41,7 @@ class BotMessageDispatcher
   def initialize(message, user)
     @message = message
     @user = user
-    @tracker = Staccato.tracker(Environment.tracker_id, user.id)
+    @tracker = Staccato.tracker(Environment.tracker_id, user&.id)
   end
 
   def process
@@ -118,9 +118,10 @@ class BotMessageDispatcher
   def track(command, command_class)
     @tracker.pageview(
       path: command.to_s.gsub('BotCommand::', ''),
-      geographical_id: country_code(command_class)
+      geographical_id: country_code(command_class),
+      user_language: language
     )
-    @tracker.event(category: @message['message']['chat']['type'], action: base_command.event)
+    @tracker.event(category: @message['message']['chat']['type'], action: country_code(command_class))
   end
 
   def country_code(command)
