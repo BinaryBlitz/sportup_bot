@@ -16,6 +16,7 @@
           <th>Название</th>
           <th>Адрес</th>
           <th>Участников</th>
+          <th>Дата начала</th>
           <th></th>
         </tr>
       </thead>
@@ -27,6 +28,7 @@
             <td><%= event.name %></td>
             <td><%= event.address %></td>
             <td><%= "#{event.members_count}/#{event.user_limit}" %></td>
+            <td><%= event.starting_date %></td>
           </tr>
         <% end %>
       </tbody>
