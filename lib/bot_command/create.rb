@@ -15,19 +15,26 @@ module BotCommand
       if event
         send_message(I18n.t('existing_event'))
       else
-        send_message_with_reply(I18n.t('name'))
-        user.next_bot_command(method: :name, class: self.class.to_s)
+        send_message(
+          I18n.t('sport_type'),
+          reply_markup: keyboard_buttons(sport_types_list),
+          reply_to_message_id: @message.dig('message', 'message_id')
+        )
+        user.next_bot_command(method: :sport_type, class: self.class.to_s)
       end
     end
 
-    def timezone
-      timezone = Timezone.lookup(*coordinates)
-      chat.update(timezone: timezone)
+    def sport_type
+      valid_sport_type? do |sport_type|
+        event = Event.new(sport_type: sport_type, chat: chat)
+        send_message_with_reply(I18n.t('name'), reply_markup: { remove_keyboard: true }.to_json)
+        user.next_bot_command(method: :name, class: self.class.to_s, event: event)
+      end
     end
 
     def name
       valid_length? text do |name|
-        event = Event.new(name: name, chat: chat)
+        event = user.bot_command_data['event'].update(name: name)
         send_message_with_reply(I18n.t('address'))
         user.next_bot_command(method: :address, class: self.class.to_s, event: event)
       end
@@ -83,6 +90,11 @@ module BotCommand
       "#{event.starts_at.strftime('%H:%M')} - #{event.ends_at.strftime('%H:%M')} \n" \
       "#{event.user_limit} #{I18n.t('participants')} \n" \
       "#{I18n.t('info_message')}"
+    end
+
+    def timezone
+      timezone = Timezone.lookup(*coordinates)
+      chat.update(timezone: timezone)
     end
   end
 end
