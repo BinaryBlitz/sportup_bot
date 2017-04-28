@@ -8,6 +8,17 @@ module Helper
       de: '🇩🇪 Deutsch'
     }.freeze
 
+    AVAILABLE_SPORT_TYPES = {
+      I18n.t('hokey'),
+      I18n.t('football'),
+      I18n.t('basketball'),
+      I18n.t('rugby'),
+      I18n.t('tennis'),
+      I18n.t('badminton'),
+      I18n.t('baseball'),
+      I18n.t('ping-pong')
+    }.freeze
+
     def keyboard_buttons(button_list)
       Telegram::Bot::Types::ReplyKeyboardMarkup.new(
         keyboard: button_list,
