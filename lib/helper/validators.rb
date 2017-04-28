@@ -83,5 +83,15 @@ module Helper
         block_given? && yield(lang)
       end
     end
+
+    def valid_sport_type?(sport_type, user)
+      if AVAILABLE_SPORT_TYPES.values.exclude?(sport_type)
+        send_message(I18n.t('invalid_sport_type'))
+        user.reset_next_bot_command
+        false
+      else
+        block_given? && yield(sport_type)
+      end
+    end
   end
 end
