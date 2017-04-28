@@ -81,6 +81,14 @@ en:
   starts_at: 'Beginning time?'
   ends_at: 'End time?'
   user_limit: 'Number of participants?'
+  hokey: '🏒 Hokey'
+  football: '⚽ Football'
+  basketball: '🏀 Basketball'
+  rugby: '🏈 Rugby'
+  tennis: '🎾 Tennis'
+  badminton: '🏸 Badminton'
+  baseball: '⚾ Baseball'
+  ping-pong: '🏓 Ping pong'
   time:
     formats:
       default: '%d.%m.%Y'
