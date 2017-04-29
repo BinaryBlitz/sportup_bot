@@ -75,22 +75,32 @@ module Helper
     end
 
     def valid_lang?(lang, user)
-      if AVAILABLE_LANGS.values.exclude?(lang)
+      if AVAILABLE_LANGS.values.include?(lang)
+        block_given? && yield(lang)
+      else
         send_message(I18n.t('invalid_lang'))
         user.reset_next_bot_command
         false
-      else
-        block_given? && yield(lang)
       end
     end
 
-    def valid_sport_type?(sport_type, user)
-      if AVAILABLE_SPORT_TYPES.values.exclude?(sport_type)
+    def valid_sport_type?(sport_type)
+      if AVAILABLE_SPORT_TYPES.map { |st| I18n.t(st) }.include?(sport_type)
+        block_given? && yield(sport_type)
+      else
         send_message(I18n.t('invalid_sport_type'))
         user.reset_next_bot_command
         false
+      end
+    end
+
+    def valid_team_limit?(team_limit)
+      if TEAM_LIMIT.include?(team_limit)
+        block_given? && yield(team_limit)
       else
-        block_given? && yield(sport_type)
+        send_message(I18n.t('invalid_team_limit'))
+        user.reset_next_bot_command
+        false
       end
     end
   end
