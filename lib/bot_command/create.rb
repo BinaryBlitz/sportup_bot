@@ -25,9 +25,9 @@ module BotCommand
     end
 
     def sport_type
-      valid_sport_type? do |sport_type|
+      valid_sport_type? text do |sport_type|
         event = Event.new(sport_type: sport_type, chat: chat)
-        send_message_with_reply(I18n.t('name'), reply_markup: { remove_keyboard: true }.to_json)
+        send_message_with_reply(I18n.t('name'))
         user.next_bot_command(method: :name, class: self.class.to_s, event: event)
       end
     end
@@ -78,6 +78,18 @@ module BotCommand
     def user_limit
       valid_number? text do |user_limit|
         event = user.bot_command_data['event'].update(user_limit: user_limit)
+        send_message(
+          I18n.t('team_limit'),
+          reply_markup: keyboard_buttons(team_limit_list),
+          reply_to_message_id: @message.dig('message', 'message_id')
+        )
+        user.next_bot_command(method: :team_limit, class: self.class.to_s, event: event)
+      end
+    end
+
+    def team_limit
+      valid_team_limit? text do |team_limit|
+        event = user.bot_command_data['event'].update(team_limit: team_limit)
         Event.create(event)
         send_message(info)
         user.reset_next_bot_command
