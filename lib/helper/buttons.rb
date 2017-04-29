@@ -1,4 +1,7 @@
 require 'telegram/bot'
+require 'i18n'
+
+I18n.enforce_available_locales = false
 
 module Helper
   module Buttons
@@ -8,16 +11,12 @@ module Helper
       de: '🇩🇪 Deutsch'
     }.freeze
 
-    AVAILABLE_SPORT_TYPES = {
-      I18n.t('hokey'),
-      I18n.t('football'),
-      I18n.t('basketball'),
-      I18n.t('rugby'),
-      I18n.t('tennis'),
-      I18n.t('badminton'),
-      I18n.t('baseball'),
-      I18n.t('ping-pong')
-    }.freeze
+    AVAILABLE_SPORT_TYPES = [
+      'hokey', 'football', 'basketball', 'rugby',
+      'tennis', 'badminton', 'baseball', 'ping-pong'
+    ].freeze
+
+    TEAM_LIMIT = *(1..6).map(&:to_s).freeze
 
     def keyboard_buttons(button_list)
       Telegram::Bot::Types::ReplyKeyboardMarkup.new(
@@ -36,6 +35,16 @@ module Helper
       AVAILABLE_LANGS.values.map do |lang|
         [{ text: lang }]
       end
+    end
+
+    def sport_types_list
+      AVAILABLE_SPORT_TYPES.map do |sport_type|
+        { text: I18n.t("#{sport_type}") }
+      end.each_slice(2).map { |e| e }
+    end
+
+    def team_limit_list
+      TEAM_LIMIT.map { |number| [{ text: number }] }.each_slice(2).map { |e| e }
     end
 
     def candidates_list(candidates)
