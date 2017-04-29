@@ -90,6 +90,22 @@ module BotCommand
     def team_limit
       valid_team_limit? text do |team_limit|
         event = user.bot_command_data['event'].update(team_limit: team_limit)
+        send_message_with_reply(I18n.t('price'))
+        user.next_bot_command(method: :price, class: self.class.to_s, event: event)
+      end
+    end
+
+    def price
+      valid_number? text do |price|
+        event = user.bot_command_data['event'].update(price: price)
+        send_message_with_reply(I18n.t('public'))
+        user.next_bot_command(method: :public, class: self.class.to_s, event: event)
+      end
+    end
+
+    def public
+      valid_visibility? text do |public|
+        event = user.bot_command_data['event'].update(public: public)
         Event.create(event)
         send_message(info)
         user.reset_next_bot_command
