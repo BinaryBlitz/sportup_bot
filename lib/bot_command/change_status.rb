@@ -17,9 +17,9 @@ module BotCommand
     end
 
     def set_status
-      valid_visibility? text do |public|
-        event.update(public: public)
-        if public
+      valid_visibility? text do |visibility|
+        event.update(public: visibility)
+        if visibility == 'public'
           send_message(I18n.t('set_public'), reply_markup: { remove_keyboard: true }.to_json)
           user.reset_next_bot_command
         else

@@ -108,9 +108,9 @@ module BotCommand
     end
 
     def public
-      valid_visibility? text do |public|
-        event = user.bot_command_data['event'].update(public: public)
-        if public
+      valid_visibility? text do |visibility|
+        event = user.bot_command_data['event'].update(public: visibility)
+        if visibility == 'public'
           Event.create(event)
           send_message(info, reply_markup: { remove_keyboard: true }.to_json)
           user.reset_next_bot_command

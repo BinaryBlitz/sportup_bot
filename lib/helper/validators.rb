@@ -122,8 +122,7 @@ module Helper
     def valid_visibility?(visibility)
       if AVAILABLE_VISIBILITY.map { |visibility| I18n.t(visibility) }.include?(visibility)
         availability = AVAILABLE_VISIBILITY.detect { |availability| I18n.t(availability) == visibility }
-        public = availability == 'public' ? true : false
-        block_given? && yield(public)
+        block_given? && yield(availability)
       else
         send_message_with_reply(I18n.t('invalid_visibility'))
         false
