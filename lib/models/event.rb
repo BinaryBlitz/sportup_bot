@@ -10,14 +10,17 @@ class Event < ActiveRecord::Base
 
   default_scope { where(closed: false) }
 
+  FREQUENCY_IN_MINUTES = 10
+  SECONDS_IN_MINUTE = 60
+
   belongs_to :chat
 
   has_many :users, through: :memberships
   has_many :memberships, dependent: :destroy
   has_many :guests, dependent: :destroy
 
-  def close
-    return unless close_time?
+  def start_event
+    return unless job_time?(date_with_time(starts_at))
     I18n.locale = lang if lang
     BotCommand::Base.new.send_message(I18n.t('farewell_message'), chat_id: chat.chat_id)
   end
@@ -52,9 +55,7 @@ class Event < ActiveRecord::Base
     Timezone.fetch(chat.timezone, Timezone['Europe/Moscow'])
   end
 
-  private
-
-  def close_time?
-    ((current_time_in_timezone - date_with_time(starts_at)).to_i / 60).between?(0, 10)
+  def job_time?(time)
+    ((current_time_in_timezone - time).to_i / SECONDS_IN_MINUTE).between?(0, FREQUENCY_IN_MINUTES)
   end
 end

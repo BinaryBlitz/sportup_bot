@@ -41,20 +41,20 @@ namespace :db do
   end
 end
 
-desc 'Close an event'
-task :close do
+desc 'Start event'
+task :start_event do
   AppConfigurator.new.configure
-  Event.all.map(&:close) if Event.any?
+  Event.all.each(&:start_event) if Event.any?
 end
 
 desc 'Start vote'
 task :start_vote do
   AppConfigurator.new.configure
-  Event.all.map(&:begin_vote) if Event.any?
+  Event.all.each(&:begin_vote) if Event.any?
 end
 
 desc 'Close vote'
 task :close_vote do
   AppConfigurator.new.configure
-  Event.all.map(&:close_vote_on_time) if Event.any?
+  Event.all.each(&:close_vote_on_time) if Event.any?
 end
