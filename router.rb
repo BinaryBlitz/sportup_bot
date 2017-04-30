@@ -6,12 +6,14 @@ class Router
   end
 
   def route
-    case @request.path
-    when '/events'
+    event = Event.find(path_id) if path_id
+    if @request.path == '/events'
       [200, { 'Content-Type' => 'text/html' }, [events_template]]
-    when "/events/#{path_id}"
-      event = Event.find(path_id)
+    elsif @request.path == "/events/#{path_id}" && @request.get?
       [200, { 'Content-Type' => 'text/html' }, [event_template(event)]]
+    elsif @request.path == "/events/#{path_id}" && @request.delete?
+      event.destroy
+      [200, { 'Content-Type' => 'text/html' }, [events_template]]
     end
   end
 

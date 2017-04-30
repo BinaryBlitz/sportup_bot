@@ -30,6 +30,11 @@
             <td><%= event.address %></td>
             <td><%= "#{event.members_count}/#{event.user_limit}" %></td>
             <td><%= event.starting_date %></td>
+            <td>
+              <form action="/events/<%= event.id %>" method="post">
+                <input class="btn btn-danger" name="_method" type="submit" value="delete" />
+              </form>
+            </td>
           </tr>
         <% end %>
       </tbody>
