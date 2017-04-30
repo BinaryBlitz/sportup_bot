@@ -8,7 +8,11 @@ module BotCommand
     end
 
     def start
-      send_message_with_reply(I18n.t('change_status'))
+      send_message(
+        I18n.t('change_status'),
+        reply_markup: keyboard_buttons(visibility_list),
+        reply_to_message_id: @message.dig('message', 'message_id')
+      )
       user.next_bot_command(method: :set_status, class: self.class.to_s)
     end
 
