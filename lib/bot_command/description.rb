@@ -1,8 +1,5 @@
 module BotCommand
   class Description < Base
-    include Helper::Buttons
-    include Helper::Validators
-
     def should_start?
       text == '/description' || text == "/description@#{bot_name}"
     end
