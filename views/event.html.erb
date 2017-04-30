@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SportUp Bot</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+  <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+</head>
+<body>
+  <div class='container'>
+    <h1><%= name %></h1>
+
+    <div class="form-group">
+      <strong>Дата и время создания:</strong> <%= created_at %>
+    </div>
+
+    <div class="form-group">
+      <strong>Дата и время начала:</strong> <%= date_with_time(starts_at) %>
+    </div>
+
+    <div class="form-group">
+      <strong>Дата и время конца:</strong> <%= date_with_time(ends_at) %>
+    </div>
+
+    <div class="form-group">
+      <strong>Адрес:</strong> <%= address %>
+    </div>
+
+    <div class="form-group">
+      <strong>Количество участников:</strong> <%= user_limit %>
+    </div>
+
+    <div class="form-group">
+      <strong>Количество команд:</strong> <%= team_limit %>
+    </div>
+
+    <div class="form-group">
+      <strong>Публичная:</strong> <%= public %>
+    </div>
+
+    <div class="form-group">
+      <strong>Пароль:</strong> <%= password %>
+    </div>
+
+    <div class="form-group">
+      <strong>Описание:</strong> <%= description %>
+    </div>
+
+    <% if members.present? %>
+      <h2>Список участников</h2>
+
+      <table class="table">
+        <thead>
+          <th>№</th>
+          <th>Имя</th>
+        </thead>
+        <tbody>
+          <% users.each do |user| %>
+            <tr>
+              <td><%= user.id %></td>
+              <td><%= user.name %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+</body>
+</html>

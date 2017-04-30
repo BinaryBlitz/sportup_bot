@@ -1,18 +1,18 @@
 require_relative 'lib/bot_message_dispatcher'
 require_relative 'lib/models/user'
-require './environment'
+require_relative 'router'
+require_relative 'environment'
 require 'json'
-require 'tilt'
 
 class TelegramBot
   def call(env)
-    req = Rack::Request.new(env)
-    if req.path_info == '/events'
-      return [200, { 'Content-Type' => 'text/html' }, [template]]
-    else
+    request = Rack::Request.new(env)
+    if request.path_info == Environment.webhook_path
       return empty_response if env['rack.input'].read.empty?
       env['rack.input'].rewind
       webhook_message(env)
+    else
+      return Router.new(request).route
     end
   end
 
@@ -24,10 +24,6 @@ class TelegramBot
 
   def empty_response
     ['200', { 'Content-Type' => 'application/json' }, []]
-  end
-
-  def template
-    template = Tilt.new('views/events.html.erb').render
   end
 
   def from
