@@ -55,10 +55,14 @@
           <th>Имя</th>
         </thead>
         <tbody>
-          <% users.each do |user| %>
+          <% members.each do |member| %>
             <tr>
-              <td><%= user.id %></td>
-              <td><%= user.name %></td>
+              <td><%= member.id %></td>
+              <% if member.class == User %>
+                <td><%= member.name %></td>
+              <% else %>
+                <td><%= "Гость #{member.user.name}" %></td>
+              <% end %>
             </tr>
           <% end %>
         </tbody>
