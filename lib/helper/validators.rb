@@ -8,6 +8,8 @@ module Helper
     MAX_TEXT_LENGTH = 100
     MAX_NUMBER_OF_MEMBERS = 1000
     MIN_NUMBER_OF_MEMBERS = 1
+    MAX_PRICE = 1_000_000
+    MIN_PRICE = 0
 
     def valid_date?(event, date)
       yield(date) if valid_date_format? && present_date?(new_event, date) && block_given?
@@ -44,6 +46,21 @@ module Helper
       else
         block_given? && yield(number)
       end
+    end
+
+    def valid_price?(price)
+      if price.to_i > MAX_PRICE
+        send_message_with_reply(I18n.t('max_price'))
+        false
+      elsif Integer(price) < MIN_PRICE
+        send_message_with_reply(I18n.t('min_price'))
+        false
+      else
+        block_given? && yield(price)
+      end
+      rescue
+        send_message_with_reply(I18n.t('min_price'))
+        false
     end
 
     def valid_number_of_teams?(number, event)
@@ -88,8 +105,7 @@ module Helper
       if AVAILABLE_SPORT_TYPES.map { |st| I18n.t(st) }.include?(sport_type)
         block_given? && yield(sport_type)
       else
-        send_message(I18n.t('invalid_sport_type'))
-        user.reset_next_bot_command
+        send_message_with_reply(I18n.t('invalid_sport_type'))
         false
       end
     end
@@ -98,8 +114,18 @@ module Helper
       if TEAM_LIMIT.include?(team_limit)
         block_given? && yield(team_limit)
       else
-        send_message(I18n.t('invalid_team_limit'))
-        user.reset_next_bot_command
+        send_message_with_reply(I18n.t('invalid_team_limit'))
+        false
+      end
+    end
+
+    def valid_visibility?(visibility)
+      if AVAILABLE_VISIBILITY.map { |visibility| I18n.t(visibility) }.include?(visibility)
+        availability = AVAILABLE_VISIBILITY.detect { |availability| I18n.t(availability) == visibility }
+        public = availability == 'public' ? true : false
+        block_given? && yield(public)
+      else
+        send_message_with_reply(I18n.t('invalid_visibility'))
         false
       end
     end

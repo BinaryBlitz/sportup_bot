@@ -17,6 +17,7 @@ module Helper
     ].freeze
 
     TEAM_LIMIT = *(1..6).map(&:to_s).freeze
+    AVAILABLE_VISIBILITY = %w(public private).freeze
 
     def keyboard_buttons(button_list)
       Telegram::Bot::Types::ReplyKeyboardMarkup.new(
@@ -44,7 +45,13 @@ module Helper
     end
 
     def team_limit_list
-      TEAM_LIMIT.map { |number| [{ text: number }] }.each_slice(2).map { |e| e }
+      TEAM_LIMIT.map { |number| { text: number } }.each_slice(2).map { |e| e }
+    end
+
+    def visibility_list
+      AVAILABLE_VISIBILITY.map do |visibility|
+        [{ text: I18n.t("#{visibility}") }]
+      end
     end
 
     def candidates_list(candidates)
