@@ -20,14 +20,18 @@ class BotMessageDispatcher
     BotCommand::Randomize,
     BotCommand::Teams,
     BotCommand::Vote,
-    BotCommand::Language
+    BotCommand::Language,
+    BotCommand::Description,
+    BotCommand::ChangeStatus
   ].freeze
 
   ADMIN_COMMANDS = [
     BotCommand::Create,
     BotCommand::Stop,
     BotCommand::Randomize,
-    BotCommand::Language
+    BotCommand::Language,
+    BotCommand::Description,
+    BotCommand::ChangeStatus
   ].freeze
 
   EVENT_FREE_COMMANDS = [
@@ -85,11 +89,11 @@ class BotMessageDispatcher
   end
 
   def incorrect_message?
-    @message.dig('message', 'text').nil? && @message.dig('message', 'location').nil? && @message['callback_query'].nil?
+    [@message.dig('message', 'text'), @message.dig('message', 'location'), @message['callback_query']].all?(&:nil?)
   end
 
   def start_command(command)
-    BotCommand::const_get(command).new(@user, @message).start
+    Kernel.const_get("BotCommand::#{command}").new(@user, @message).start
   end
 
   def vote_command
@@ -143,6 +147,6 @@ class BotMessageDispatcher
   end
 
   def execute_next_command_method(method)
-    Object.const_get(@user.bot_command_data['class']).new(@user, @message).public_send(method)
+    Kernel.const_get(@user.bot_command_data['class']).new(@user, @message).public_send(method)
   end
 end

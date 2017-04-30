@@ -112,7 +112,7 @@ module BotCommand
         event = user.bot_command_data['event'].update(public: public)
         if public
           Event.create(event)
-          send_message(info)
+          send_message(info, reply_markup: { remove_keyboard: true }.to_json)
           user.reset_next_bot_command
         else
           send_message_with_reply(I18n.t('password'))
