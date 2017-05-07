@@ -105,6 +105,9 @@ ru:
   set_password: 'Пароль установлен'
   set_description: 'Описание добавлено'
   set_public: 'Игра теперь публичная'
+  entered_from_app: 'вошел в игру через приложение SportUp'
+  left_from_app: 'вышел из игры через приложение SportUp'
+  app: 'приложение SportUp'
   time:
     formats:
       default: '%d.%m.%Y'
