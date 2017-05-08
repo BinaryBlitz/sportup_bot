@@ -1,4 +1,5 @@
 require './lib/models/event'
+require './lib/models/app'
 require './lib/models/app_event'
 require './lib/models/app_user'
 require './lib/models/app_sport_type'
@@ -151,11 +152,11 @@ module BotCommand
       AppEvent.create(
         name: event['name'], address: event['address'],
         latitude: geocoder_coordinates(event)[0],
-        logintude: geocoder_coordinates(event)[1],
-        starts_at: telegram_event.date_with_time(event['starts_at']),
+        longitude: geocoder_coordinates(event)[1],
+        starts_at: telegram_event.date_with_time(telegram_event.starts_at),
         ends_at: event['ends_at'], price: event['price'], user_limit: event['user_limit'],
         team_limit: event['team_limit'], public: event['public'], password: event['password'],
-        creator: app_user, sports_type: app_sport_type(event), chat_id: chat_id
+        creator_id: app_user.id, sport_type_id: app_sport_type(event).id, chat_id: chat_id
       )
     end
 
