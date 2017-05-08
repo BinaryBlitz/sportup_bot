@@ -156,7 +156,7 @@ module BotCommand
         starts_at: telegram_event.date_with_time(telegram_event.starts_at),
         ends_at: event['ends_at'], price: event['price'], user_limit: event['user_limit'],
         team_limit: event['team_limit'], public: event['public'], password: event['password'],
-        creator_id: app_user.id, sport_type_id: app_sport_type(event).id, chat_id: chat_id
+        creator_id: app_user.id, sport_type_id: app_sport_type(event).id, chat_id: telegram_event.chat_id
       )
     end
 
