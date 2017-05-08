@@ -56,6 +56,10 @@ module BotCommand
       message_chat_id || callback_query_chat_id
     end
 
+    def username
+      @user.username.present? ? "@#{@user.name}" : @user.first_name.to_s
+    end
+
     protected
 
     def send_message_with_reply(text)
@@ -113,10 +117,6 @@ module BotCommand
 
     def bot_name
       @api.getMe['result']['username']
-    end
-
-    def username
-      @user.username.present? ? "@#{@user.name}" : @user.first_name.to_s
     end
 
     def private_chat?
