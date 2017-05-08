@@ -15,17 +15,23 @@ class Guest < ActiveRecord::Base
   end
 
   def message(name)
-    BotCommand::Base.new.send_message(
-      "#{user.name} #{I18n.t('invited_guest', name: name)} " \
+    base.send_message(
+      "#{base.username} #{I18n.t('invited_guest', name: name)} " \
       "#{I18n.l(event.starting_date)} #{event.name} " \
-      "#{I18n.t('participates')} #{event.members_count}/#{event.user_limit}" \
+      "#{I18n.t('participates')} #{event.members_count}/#{event.user_limit}",
+      chat_id: event.chat.chat_id
     )
   end
 
   def message_from_app
-    BotCommand::Base.new.send_message(
-      "#{I18n.t('guest')} #{user.name} #{I18n.t('entered_from_app')}. " \
-      "#{I18n.t('participates')} #{event.members_count}/#{event.user_limit}" \
+    base.send_message(
+      "#{I18n.t('guest')} #{base.username} #{I18n.t('entered_from_app')}. " \
+      "#{I18n.t('participates')} #{event.members_count}/#{event.user_limit}",
+      chat_id: event.chat.chat_id
     )
+  end
+
+  def base
+    BotCommand::Base.new(user)
   end
 end
