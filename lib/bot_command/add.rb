@@ -30,23 +30,13 @@ module BotCommand
 
     def add_anonymous_guest
       Guest.create(user: user, event: event)
-      info_message(nil)
     end
 
     def add_guest_with_name
       name = text.gsub(/\/add\s+/, '')
       valid_length?(name) do |name|
         Guest.create(user: user, event: event, name: name)
-        info_message(name)
       end
-    end
-
-    def info_message(name)
-      send_message(
-        "#{username} #{I18n.t('invited_guest', name: name)} " \
-        "#{I18n.l(event.starting_date)} #{event.name} " \
-        "#{I18n.t('participates')} #{event.members_count}/#{event.user_limit}" \
-      )
     end
   end
 end

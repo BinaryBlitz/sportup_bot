@@ -105,6 +105,9 @@ en:
   set_password: 'Password is set'
   set_description: 'Description is set'
   set_public: 'Game is public now'
+  entered_from_app: 'entered in game though SportUp application'
+  left_from_app: 'left from game though SportUp application'
+  app: 'SportUp applciaiton'
   time:
     formats:
       default: '%d.%m.%Y'

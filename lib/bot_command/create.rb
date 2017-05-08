@@ -1,4 +1,8 @@
 require './lib/models/event'
+require './lib/models/app'
+require './lib/models/app_event'
+require './lib/models/app_user'
+require './lib/models/app_sport_type'
 require 'timezone'
 require 'geocoder'
 
@@ -111,7 +115,7 @@ module BotCommand
       valid_visibility? text do |visibility|
         event = user.bot_command_data['event'].update(public: visibility)
         if visibility == 'public'
-          Event.create(event)
+          create(event)
           send_message(info, reply_markup: { remove_keyboard: true }.to_json)
           user.reset_next_bot_command
         else
@@ -124,7 +128,7 @@ module BotCommand
     def password
       valid_length? text do |password|
         event = user.bot_command_data['event'].update(password: password)
-        Event.create(event)
+        create(event)
         send_message(info, reply_markup: { remove_keyboard: true }.to_json)
         user.reset_next_bot_command
       end
@@ -141,6 +145,37 @@ module BotCommand
     def timezone
       timezone = Timezone.lookup(*coordinates)
       chat.update(timezone: timezone)
+    end
+
+    def create(event)
+      telegram_event = Event.create(event)
+      AppEvent.create(
+        name: event['name'], address: event['address'],
+        latitude: geocoder_coordinates(event)[0],
+        longitude: geocoder_coordinates(event)[1],
+        starts_at: telegram_event.date_with_time(telegram_event.starts_at),
+        ends_at: event['ends_at'], price: event['price'], user_limit: event['user_limit'],
+        team_limit: event['team_limit'], public: event['public'], password: event['password'],
+        creator_id: app_user.id, sport_type_id: app_sport_type(event).id, chat_id: chat_id
+      )
+    end
+
+    def app_user
+      AppUser.find_or_create_by(telegram_id: user.telegram_id) do |app_user|
+        app_user.first_name = user.first_name
+        app_user.last_name = user.last_name
+        app_user.username = user.username
+      end
+    end
+
+    def app_sport_type(event)
+      # Remove sport type emoji and space
+      sport_type = event['sport_type'][2..-1]
+      AppSportType.find_by_name(sport_type)
+    end
+
+    def geocoder_coordinates(event)
+      Geocoder.coordinates(event['address'])
     end
   end
 end
