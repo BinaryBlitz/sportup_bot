@@ -1,12 +1,14 @@
 require './database_connector'
 require 'timezone'
 require 'yaml'
+require 'geocoder'
 
 class AppConfigurator
   def configure
     setup_i18n
     setup_database
     setup_timezone
+    setup_geocoder
   end
 
   private
@@ -26,5 +28,12 @@ class AppConfigurator
       c.username = ENV["GEONAMES_NAME"]
       c.offset_etc_zones = true
     end
+  end
+
+  def setup_geocoder
+    Geocoder.configure(
+      lookup: :google, api_key: ENV["GOOGLE_API_KEY"],
+      use_https: true, ip_lookup: :maxmind
+    )
   end
 end
