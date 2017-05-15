@@ -9,7 +9,7 @@ module BotCommand
 
     def start
       if event.date_with_time(event.ends_at) > Time.now
-        answer_callback_query(I18n.t('not_finished'))
+        send_message(I18n.t('not_finished'))
       else
         event&.begin_vote_message
       end
