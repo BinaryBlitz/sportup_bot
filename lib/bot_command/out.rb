@@ -13,6 +13,11 @@ module BotCommand
         info_message
       else
         event.users.destroy(user) if event.users.include?(user)
+        AppMembership.where(
+          user_id: app_user.id,
+          event_id: AppEvent.find_by(chat_id: event.chat.chat_id).id
+        ).first&.destroy
+        info_message
       end
       user.reset_next_bot_command
     end
