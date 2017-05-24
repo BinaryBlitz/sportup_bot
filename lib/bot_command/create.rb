@@ -156,16 +156,8 @@ module BotCommand
         starts_at: telegram_event.date_with_time(telegram_event.starts_at),
         ends_at: event['ends_at'], price: event['price'], user_limit: event['user_limit'],
         team_limit: event['team_limit'], public: event['public'], password: event['password'],
-        creator_id: app_user.id, sport_type_id: app_sport_type(event).id, chat_id: telegram_event.chat_id
+        creator_id: app_user.id, sport_type_id: app_sport_type(event).id, chat_id: telegram_event.chat.chat_id
       )
-    end
-
-    def app_user
-      AppUser.find_or_create_by(telegram_id: user.telegram_id) do |app_user|
-        app_user.first_name = user.first_name
-        app_user.last_name = user.last_name
-        app_user.username = user.username
-      end
     end
 
     def app_sport_type(event)

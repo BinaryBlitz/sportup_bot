@@ -1,4 +1,6 @@
 require './lib/models/membership'
+require './lib/models/app'
+require './lib/models/app_membership'
 
 module BotCommand
   class In < Base
@@ -11,6 +13,10 @@ module BotCommand
         send_message(I18n.t('started_event'))
       elsif event.members_count < event.user_limit && event.members.exclude?(user)
         Membership.create(user: user, event: event)
+        AppMembership.find_or_create_by(user_id: app_user.id) do |membership|
+          membership.event_id = AppEvent.find_by(chat_id: event.chat.chat_id).id
+        end
+        info_message
       elsif event.members.include?(user)
         info_message
       else

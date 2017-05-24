@@ -62,6 +62,14 @@ module BotCommand
 
     protected
 
+    def app_user
+      AppUser.find_or_create_by(telegram_id: user.telegram_id) do |app_user|
+        app_user.first_name = user.first_name
+        app_user.last_name = user.last_name
+        app_user.username = user.username
+      end
+    end
+
     def send_message_with_reply(text)
       @api.send_message(
         chat_id: chat_id,
