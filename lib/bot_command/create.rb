@@ -116,7 +116,6 @@ module BotCommand
         event = user.bot_command_data['event'].update(public: visibility)
         if visibility == 'public'
           create(event)
-          send_message(info, reply_markup: { remove_keyboard: true }.to_json)
           user.reset_next_bot_command
         else
           send_message_with_reply(I18n.t('password'))
@@ -129,7 +128,6 @@ module BotCommand
       valid_length? text do |password|
         event = user.bot_command_data['event'].update(password: password)
         create(event)
-        send_message(info, reply_markup: { remove_keyboard: true }.to_json)
         user.reset_next_bot_command
       end
     end
@@ -148,16 +146,19 @@ module BotCommand
     end
 
     def create(event)
-      telegram_event = Event.create(event)
-      AppEvent.create(
-        name: event['name'], address: event['address'],
-        latitude: geocoder_coordinates(event)[0],
-        longitude: geocoder_coordinates(event)[1],
-        starts_at: telegram_event.date_with_time(telegram_event.starts_at),
-        ends_at: event['ends_at'], price: event['price'], user_limit: event['user_limit'],
-        team_limit: event['team_limit'], public: event['public'], password: event['password'],
-        creator_id: app_user.id, sport_type_id: app_sport_type(event).id, chat_id: telegram_event.chat.chat_id
-      )
+      ActiveRecord::Base.transaction do
+        telegram_event = Event.create(event)
+        AppEvent.create(
+          name: event['name'], address: event['address'],
+          latitude: geocoder_coordinates(event)[0],
+          longitude: geocoder_coordinates(event)[1],
+          starts_at: telegram_event.date_with_time(telegram_event.starts_at),
+          ends_at: event['ends_at'], price: event['price'], user_limit: event['user_limit'],
+          team_limit: event['team_limit'], public: event['public'], password: event['password'],
+          creator_id: app_user.id, sport_type_id: app_sport_type(event).id, chat_id: telegram_event.chat.chat_id
+        )
+        send_message(info, reply_markup: { remove_keyboard: true }.to_json)
+      end
     end
 
     def app_sport_type(event)
