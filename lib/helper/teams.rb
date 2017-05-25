@@ -73,7 +73,7 @@ module Helper
 
     def member_name(member)
       name = member.username.present? ? "@#{member.username}" : member.first_name.to_s
-      member.from_app? ? name.concat(", #{I18n.t('app')}") : name
+      membership(member).from_app? ? name.concat(", #{I18n.t('app')}") : name
     end
 
     def guest_name(member)
