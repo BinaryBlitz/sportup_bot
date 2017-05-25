@@ -4,7 +4,7 @@ require 'staccato'
 require './environment'
 
 class BotMessageDispatcher
-  attr_reader :message, :user
+  attr_reader :message, :user, :base
 
   SET_LANG_COMMAND = 'set_lang'.freeze
   AVAILABLE_COMMANDS = [
@@ -46,32 +46,38 @@ class BotMessageDispatcher
     @message = message
     @user = user
     @tracker = Staccato.tracker(Environment.tracker_id, user&.id)
+    @base = BotCommand::Base.new(user, message)
   end
 
   def process
     set_i18n if language
     command = parse_command
-    return start_command('Language') if base_command.admin? && no_language?
-    return start_command('Unauthorized') unless command_for_admin?(command)
-    if @message['edited_message']
-      base_command.repeat_command
-    elsif @message['callback_query'] && vote_command.event
-     vote_command.vote
-    elsif incorrect_message?
-      base_command.only_text
-    elsif @message['message']
-      message_process(command)
-    else
-      start_command('Undefined')
-    end && user.save
+    return command('Language').start if base.admin? && no_language?
+    return command('Unauthorized').start unless command_for_admin?(command)
+    return base.only_text if incorrect_message?
+    return command('Undefined').start unless command || next_bot_command
+    public_send("reply_to_#{message.keys[1]}".downcase.to_sym, command)
+    user.save
   rescue
     return
+  end
+
+  def reply_to_message(command)
+    if command && language
+      command_process(command)
+    elsif next_bot_command
+      execute_next_command_method(next_bot_command)
+    end
+  end
+
+  def reply_to_callback_query(_)
+    command('Vote').vote if command('Vote').event
   end
 
   protected
 
   def parse_command
-    AVAILABLE_COMMANDS.detect { |command_class| command_class.new(@user, @message).should_start? }
+    AVAILABLE_COMMANDS.detect { |command_class| command_class.new(user, message).should_start? }
   end
 
   def event_exists?(command)
@@ -80,43 +86,27 @@ class BotMessageDispatcher
 
   def command_for_admin?(command)
     return true unless ADMIN_COMMANDS.include?(command)
-    base_command.admin?
+    base.admin?
   end
 
   def no_language?
-    return false if @message['callback_query']
+    return false if message['callback_query']
     language.nil? && next_bot_command != SET_LANG_COMMAND
   end
 
   def incorrect_message?
-    [@message.dig('message', 'text'), @message.dig('message', 'location'), @message['callback_query']].all?(&:nil?)
+    [message.dig('message', 'text'), message.dig('message', 'location'), message['callback_query']].all?(&:nil?)
   end
 
-  def start_command(command)
-    Kernel.const_get("BotCommand::#{command}").new(@user, @message).start
-  end
-
-  def vote_command
-    BotCommand::Vote.new(@user, @message)
-  end
-
-  def base_command
-    BotCommand::Base.new(@user, @message)
+  def command(command)
+    Kernel.const_get("BotCommand::#{command}").new(user, message)
   end
 
   def command_process(command)
-    command_class = command.new(@user, @message)
-    return command_class.send_message(I18n.t('no_events')) unless event_exists?(command_class)
+    command_class = command.new(user, message)
+    return base.send_message(I18n.t('no_events')) unless event_exists?(command_class)
     track(command, command_class)
     command_class.start
-  end
-
-  def message_process(command)
-    if command && language
-      command_process(command)
-    elsif next_bot_command
-      execute_next_command_method(next_bot_command)
-    end
   end
 
   def track(command, command_class)
@@ -125,7 +115,7 @@ class BotMessageDispatcher
       geographical_id: country_code(command_class),
       user_language: language
     )
-    @tracker.event(category: @message['message']['chat']['type'], action: country_code(command_class))
+    @tracker.event(category: message['message']['chat']['type'], action: country_code(command_class))
   end
 
   def country_code(command)
@@ -134,7 +124,7 @@ class BotMessageDispatcher
   end
 
   def language
-    Chat.find_or_create_by(chat_id: base_command.chat_id).language
+    Chat.find_or_create_by(chat_id: base.chat_id).language
   end
 
   def set_i18n
@@ -143,10 +133,10 @@ class BotMessageDispatcher
   end
 
   def next_bot_command
-    @user.bot_command_data['method']
+    user.bot_command_data['method']
   end
 
   def execute_next_command_method(method)
-    Kernel.const_get(@user.bot_command_data['class']).new(@user, @message).public_send(method)
+    Kernel.const_get(user.bot_command_data['class']).new(user, message).public_send(method)
   end
 end
