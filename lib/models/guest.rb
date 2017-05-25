@@ -10,7 +10,6 @@ class Guest < ActiveRecord::Base
   private
 
   def send_message
-    return message_form_app if from_app?
     name.present? ? message(name) : message(nil)
   end
 
@@ -18,14 +17,6 @@ class Guest < ActiveRecord::Base
     base.send_message(
       "#{base.username} #{I18n.t('invited_guest', name: name)} " \
       "#{I18n.l(event.starting_date)} #{event.name} " \
-      "#{I18n.t('participates')} #{event.members_count}/#{event.user_limit}",
-      chat_id: event.chat.chat_id
-    )
-  end
-
-  def message_from_app
-    base.send_message(
-      "#{I18n.t('guest')} #{base.username} #{I18n.t('entered_from_app')}. " \
       "#{I18n.t('participates')} #{event.members_count}/#{event.user_limit}",
       chat_id: event.chat.chat_id
     )
