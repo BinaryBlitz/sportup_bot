@@ -37,6 +37,7 @@ en:
   invalid_location: 'Send me your game location, choose point on a map (📎 — Location — Send location)'
   invalid_sport_type: 'Choose from given sport types'
   invalid_visiblity: 'Choose from given game types'
+  invalid_team_limit: 'Choose from given number of teams'
   empty_text: 'Enter text.'
   repeat_command: 'Try again, a do not understand you.'
   max_number_of_members: 'Max number of participants is 1000.'
